@@ -7,14 +7,14 @@
 
   <!-- Open Graph / Social -->
   <meta property="og:type" content="profile">
-  <meta property="og:title" content="Matt Moseley — Systems Engineer (Hardware to Platform)">
-  <meta property="og:description" content="From Navy electronics to Apple RF to Microsoft drivers — 15 years at the boundary where hardware meets software.">
+  <meta property="og:title" content="Matt Moseley — Systems Engineer">
+  <meta property="og:description" content="Navy to Apple to Microsoft. 15 years at the part where hardware meets software and someone has to make sure it doesn't fall over.">
   <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Fonts -->
+  <!-- Fonts: Space Grotesk replaces Inter. JetBrains Mono remains. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 
   <style>
 
@@ -46,13 +46,13 @@
   /* Accent — single warm amber, current role only */
   --accent:         #E0A458;
 
-  /* Per-employer tones — desaturated, matched lightness */
+  /* Per-employer tones */
   --navy:           #2B4C7E;
-  --apple:          #555A60;
+  --apple:          #7B8794;   /* upgraded from #555A60 — 9 years deserves to register */
   --msft:           #3A6EA5;
 
   /* Typography */
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Courier New', monospace;
 
   /* Layout */
@@ -132,7 +132,7 @@ img, svg { display: block; }
 .nav-brand {
   font-weight: 600;
   font-size: 0.9375rem;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   color: var(--text-primary);
   text-decoration: none;
 }
@@ -197,13 +197,33 @@ img, svg { display: block; }
 }
 
 /* ============================================================
-   HERO — compact masthead, not a billboard
+   HERO — spectrum waterfall texture, 38vh floor
    ============================================================ */
 
 .hero {
-  min-height: 30vh;
+  min-height: 38vh;
   padding-top:    calc(var(--nav-h) + 58px);
-  padding-bottom: 60px;
+  padding-bottom: 64px;
+  /* Spectrum waterfall: atmospheric, not literal.
+     If you've stared at a waterfall display you'll smile.
+     Everyone else just sees depth. */
+  background-color: var(--bg);
+  background-image:
+    /* Horizontal frequency-bin lines — ~1.3% amber every 31px */
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 30px,
+      rgba(224, 164, 88, 0.013) 30px,
+      rgba(224, 164, 88, 0.013) 31px
+    ),
+    /* Warm amber bloom — where signal energy concentrates */
+    radial-gradient(
+      ellipse 78% 54% at 22% 62%,
+      rgba(224, 164, 88, 0.036) 0%,
+      rgba(224, 164, 88, 0.010) 48%,
+      transparent 70%
+    );
 }
 
 .hero-eyebrow {
@@ -213,19 +233,19 @@ img, svg { display: block; }
 }
 
 .hero-headline {
-  font-size: clamp(1.625rem, 3.6vw, 2.375rem);
+  font-size: clamp(1.5rem, 3.4vw, 2.125rem);
   font-weight: 700;
-  line-height: 1.18;
-  letter-spacing: -0.03em;
+  line-height: 1.22;
+  letter-spacing: -0.02em;
   color: var(--text-primary);
-  max-width: 560px;
+  max-width: 580px;
   margin-bottom: 20px;
 }
 
 .hero-lede {
   font-size: 1rem;
   color: var(--text-secondary);
-  max-width: 490px;
+  max-width: 480px;
   line-height: 1.72;
   margin-bottom: 36px;
 }
@@ -235,6 +255,43 @@ img, svg { display: block; }
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
+}
+
+/* ============================================================
+   TRIPTYCH — standalone emotional spine
+   Between hero and timeline. Three lines. Amber does real work.
+   ============================================================ */
+
+.triptych-section {
+  padding: 48px 0 52px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.triptych {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.triptych-line {
+  font-size: clamp(1.125rem, 2.1vw, 1.375rem);
+  font-weight: 500;
+  line-height: 1.48;
+  color: var(--text-secondary);
+  letter-spacing: -0.01em;
+}
+
+.triptych-accent {
+  color: var(--accent);
+}
+
+.one-sentence {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  opacity: 0.72;
 }
 
 /* ============================================================
@@ -361,14 +418,14 @@ img, svg { display: block; }
   background: var(--surface);
   border: 1px solid var(--border);
   border-left-width: 3px;
-  border-left-color: var(--border); /* default; overridden per employer */
+  border-left-color: var(--border);
   border-radius: 4px;
   padding: 20px 22px 20px 20px;
 }
 
 /* Per-employer left edge markers */
 .t-card--navy  { border-left-color: var(--navy); }
-.t-card--apple { border-left-color: var(--apple); }
+.t-card--apple { border-left-color: var(--apple); }   /* #7B8794 — registers now */
 
 /* Current role card: amber edge + very subtly amber-tinted surface */
 .t-card--current {
@@ -415,23 +472,22 @@ img, svg { display: block; }
   font-size: 1.0625rem;
   font-weight: 600;
   color: var(--text-primary);
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
   line-height: 1.3;
   margin-bottom: 5px;
 }
 
-/* Card tagline — the triptych voice */
+/* Card tagline — Matt's actual voice. Not italic. Not editorial. */
 .t-card-tagline {
   font-size: 0.9375rem;
   font-weight: 500;
-  font-style: italic;
   color: var(--text-secondary);
-  line-height: 1.45;
+  line-height: 1.5;
   margin-bottom: 12px;
 }
 
+/* Current role tagline: amber, slightly heavier */
 .t-card--current .t-card-tagline {
-  font-style: normal;
   font-weight: 600;
   color: var(--accent);
 }
@@ -440,7 +496,22 @@ img, svg { display: block; }
   font-size: 0.875rem;
   color: var(--text-secondary);
   line-height: 1.68;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
+}
+
+/* ============================================================
+   SHIPPED PRODUCTS — mono evidence line
+   ============================================================ */
+
+.shipped {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  margin-top: 2px;
+  margin-bottom: 14px;
 }
 
 /* ============================================================
@@ -479,7 +550,6 @@ img, svg { display: block; }
   flex-shrink: 0;
 }
 
-/* Navy tags: tinted with employer color at ~6% opacity */
 .t-tag--navy {
   background: rgba(43, 76, 126, 0.09);
 }
@@ -487,12 +557,12 @@ img, svg { display: block; }
   background: rgba(43, 76, 126, 0.65);
 }
 
-/* Apple tags */
+/* Apple tags — updated to match new --apple value (#7B8794) */
 .t-tag--apple {
-  background: rgba(85, 90, 96, 0.10);
+  background: rgba(123, 135, 148, 0.10);
 }
 .t-tag--apple::before {
-  background: rgba(85, 90, 96, 0.60);
+  background: rgba(123, 135, 148, 0.60);
 }
 
 /* Microsoft / current tags: amber tint */
@@ -619,10 +689,20 @@ img, svg { display: block; }
 .contact-headline {
   font-size: clamp(1.25rem, 3vw, 1.875rem);
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   line-height: 1.28;
   color: var(--text-primary);
-  margin-bottom: 32px;
+  margin-bottom: 10px;
+}
+
+.contact-meta {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+  margin-bottom: 28px;
 }
 
 .contact-ctas {
@@ -690,15 +770,14 @@ img, svg { display: block; }
 
   /* Hero shrinks */
   .hero {
-    min-height: 60vh;
-    min-height: 60svh; /* small viewport height — accounts for iOS chrome */
+    min-height: 56svh; /* small viewport height — accounts for iOS chrome */
     padding-top:    calc(var(--nav-h) + 40px);
-    padding-bottom: 40px;
+    padding-bottom: 44px;
   }
 
   .hero-headline {
-    font-size: 1.625rem;
-    letter-spacing: -0.02em;
+    font-size: 1.5rem;
+    letter-spacing: -0.015em;
   }
 
   .hero-lede {
@@ -713,6 +792,15 @@ img, svg { display: block; }
   /* Nav keeps only the brand; links move to bottom bar */
   .nav-links {
     display: none;
+  }
+
+  /* Triptych tightens */
+  .triptych-section {
+    padding: 36px 0 40px;
+  }
+
+  .triptych-line {
+    font-size: 1.0625rem;
   }
 
   /* Timeline spine shifts to left edge */
@@ -780,16 +868,16 @@ img, svg { display: block; }
 
 
   <!-- ============================================================
-       HERO — compact left-aligned masthead
+       HERO — spectrum waterfall texture, Matt's actual voice
        ============================================================ -->
   <header class="hero" id="top">
     <div class="container">
 
       <p class="hero-eyebrow mono">Systems engineer — hardware to platform</p>
 
-      <h1 class="hero-headline">I keep the seam between hardware&nbsp;and software reliable.</h1>
+      <h1 class="hero-headline">I'm Matt. I work on the part where hardware meets software and try to make sure it doesn't fall over.</h1>
 
-      <p class="hero-lede">Three employers, one constant — the layer where physical hardware becomes dependable software. Navy electronics taught me signals, Apple taught me scale, Microsoft taught me the platform underneath.</p>
+      <p class="hero-lede">Started in audio — hence "thesoundman" — and somehow ended up in systems. Turns out the skills transfer.</p>
 
       <div class="hero-ctas">
         <a href="resume/Matt_Moseley_Resume.pdf"
@@ -804,6 +892,22 @@ img, svg { display: block; }
 
     </div>
   </header>
+
+
+  <!-- ============================================================
+       TRIPTYCH — standalone emotional spine
+       Three lines. The arc of the whole thing in ~40 words.
+       ============================================================ -->
+  <section class="triptych-section" aria-label="Career arc">
+    <div class="container">
+      <div class="triptych reveal">
+        <p class="triptych-line">Learned to fix things <span class="triptych-accent">before they failed.</span></p>
+        <p class="triptych-line">That ended up on <span class="triptych-accent">a few million iPhones.</span></p>
+        <p class="triptych-line">Now I make the tooling so <span class="triptych-accent">nobody else has to lose sleep</span> over it.</p>
+      </div>
+      <p class="one-sentence">Probably the only resume with both AirPods and Driver Verifier on it.</p>
+    </div>
+  </section>
 
 
   <!-- ============================================================
@@ -843,7 +947,7 @@ img, svg { display: block; }
               <span class="mono t-card-period">2008 — 2013</span>
             </header>
             <h2 class="t-card-role">Electronics Technician</h2>
-            <p class="t-card-tagline">Learned to fix what couldn't fail.</p>
+            <p class="t-card-tagline">Learned to fix things before they failed, because failing wasn't really an option.</p>
             <p class="t-card-body">SATCOM and RF communication systems. Electronics maintenance, fault isolation, and troubleshooting in environments where the margin for error was zero.</p>
             <div class="t-tags" aria-label="Skills">
               <span class="t-tag t-tag--navy">RF</span>
@@ -899,8 +1003,9 @@ img, svg { display: block; }
               <span class="mono t-card-period">2013 — 2022</span>
             </header>
             <h2 class="t-card-role">RF Systems Engineer</h2>
-            <p class="t-card-tagline">Scaled that to millions of devices.</p>
+            <p class="t-card-tagline">That ended up running on a few million devices, which still feels a little absurd to type out.</p>
             <p class="t-card-body">RF desense analysis, wireless validation, factory test automation, dry runs, lab debug, and systems integration — across product lines shipped at Apple scale.</p>
+            <div class="shipped">Shipped on: iPhone 13 · iPhone 14 · iPhone 15 · AirPods Pro</div>
             <div class="t-tags" aria-label="Skills">
               <span class="t-tag t-tag--apple">RF Desense</span>
               <span class="t-tag t-tag--apple">Wi-Fi</span>
@@ -956,8 +1061,9 @@ img, svg { display: block; }
               <span class="mono t-card-period t-card-period--current">2022 — Present</span>
             </header>
             <h2 class="t-card-role">Driver Quality / Platform Tooling</h2>
-            <p class="t-card-tagline">Now I build the tooling that keeps it reliable.</p>
+            <p class="t-card-tagline">These days I build the tooling that keeps all of it running — so the next person isn't debugging it at 2am.</p>
             <p class="t-card-body">Windows driver quality tools, WDK, HLK, Driver Verifier, certification workflows, and partner validation. The platform layer that every Windows driver must clear before it ships.</p>
+            <div class="shipped">Ships in: Driver Verifier · Windows HLK · WDK</div>
             <div class="t-tags" aria-label="Skills">
               <span class="t-tag t-tag--msft">WDK</span>
               <span class="t-tag t-tag--msft">HLK</span>
@@ -979,7 +1085,8 @@ img, svg { display: block; }
        ============================================================ -->
   <section class="contact-section" id="contact">
     <div class="container">
-      <h2 class="contact-headline">Have a hard systems problem?<br>I'd like to hear it.</h2>
+      <h2 class="contact-headline">Got a gnarly systems problem?<br>Happy to talk.</h2>
+      <p class="contact-meta">Pacific Northwest · Open to systems engineering roles</p>
       <div class="contact-ctas">
         <a href="resume/Matt_Moseley_Resume.pdf"
            class="btn btn--primary"
