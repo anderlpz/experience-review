@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Matt Moseley | Systems Engineer</title>
+
+  <!-- Open Graph / Social -->
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="Matt Moseley — Systems Engineer (Hardware to Platform)">
+  <meta property="og:description" content="From Navy electronics to Apple RF to Microsoft drivers — 15 years at the boundary where hardware meets software.">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+
+/* ============================================================
+   RESET
+   ============================================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+
+:root {
+  /* Surface */
+  --bg:             #0D0F12;
+  --surface:        #16191F;
+  --border:         #262B33;
+
+  /* Text */
+  --text-primary:   #E8EAED;
+  --text-secondary: #9BA1AC;
+  --text-tertiary:  #6B7280;
+
+  /* Accent — single warm amber, current role only */
+  --accent:         #E0A458;
+
+  /* Per-employer tones — desaturated, matched lightness */
+  --navy:           #2B4C7E;
+  --apple:          #555A60;
+  --msft:           #3A6EA5;
+
+  /* Typography */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Courier New', monospace;
+
+  /* Layout */
+  --nav-h:   56px;
+  --max-w:   720px;
+  --pad-x:   28px;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+a { color: inherit; }
+img, svg { display: block; }
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+
+.container {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+}
+
+/* ============================================================
+   UTILITY — MONO LABEL
+   ============================================================ */
+
+.mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ============================================================
+   NAV — fixed, blur, semi-transparent
+   ============================================================ */
+
+.nav {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--nav-h);
+  z-index: 200;
+  background: rgba(13, 15, 18, 0.76);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-brand {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  text-decoration: none;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+.nav-link:hover { color: var(--text-primary); }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 9px 20px;
+  border-radius: 5px;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  line-height: 1;
+  transition: opacity 140ms ease, border-color 140ms ease, color 140ms ease, background 140ms ease;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: #0D0F12;
+  border-color: var(--accent);
+}
+.btn--primary:hover { opacity: 0.84; }
+
+.btn--outline {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: var(--border);
+}
+.btn--outline:hover {
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
+}
+
+.btn--sm {
+  padding: 6px 14px;
+  font-size: 0.8125rem;
+}
+
+/* ============================================================
+   HERO — compact masthead, not a billboard
+   ============================================================ */
+
+.hero {
+  min-height: 30vh;
+  padding-top:    calc(var(--nav-h) + 58px);
+  padding-bottom: 60px;
+}
+
+.hero-eyebrow {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  margin-bottom: 16px;
+}
+
+.hero-headline {
+  font-size: clamp(1.625rem, 3.6vw, 2.375rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+  max-width: 560px;
+  margin-bottom: 20px;
+}
+
+.hero-lede {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 490px;
+  line-height: 1.72;
+  margin-bottom: 36px;
+}
+
+.hero-ctas {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   TIMELINE SECTION
+   ============================================================ */
+
+.timeline-section {
+  padding-top:    4px;
+  padding-bottom: 104px;
+}
+
+/* ---- Two-column CSS grid spine — NOT absolute positioned ---- */
+
+.timeline-track {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  position: relative;
+}
+
+/* The continuous 1px vertical hairline rule */
+.timeline-track::before {
+  content: '';
+  position: absolute;
+  left: 18px;       /* horizontal center of the 38px spine column */
+  top:  28px;       /* starts at first dot center */
+  bottom: 20px;
+  width: 1px;
+  background: var(--border);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================================================
+   SPINE CELLS (column 1)
+   ============================================================ */
+
+.t-spine {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.t-spine--empty {
+  /* No dot — spine line simply passes through */
+  padding-top: 0;
+}
+
+/* ============================================================
+   TIMELINE DOTS
+   ============================================================ */
+
+.t-dot {
+  width:  14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  background: var(--bg);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+
+/* Hollow ring: employer-colored outline */
+.t-dot--navy  { border-color: var(--navy); }
+.t-dot--apple { border-color: var(--apple); }
+
+.t-dot svg {
+  pointer-events: none;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* Icon tint matches ring */
+.t-dot--navy  svg { color: var(--navy); }
+.t-dot--apple svg { color: var(--apple); }
+
+/* Current role: solid amber fill, slightly larger */
+.t-dot--current {
+  width:  16px;
+  height: 16px;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.t-dot--current svg { color: var(--bg); }
+
+/* ============================================================
+   ENTRY CELLS (column 2)
+   ============================================================ */
+
+.t-entry {
+  position: relative;
+  padding-left: 20px;
+  padding-bottom: 36px;
+}
+
+/* Short horizontal tick connector: spine dot → card left edge */
+.t-entry::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 25px;  /* ~dot vertical center */
+  width: 14px;
+  height: 1px;
+  background: var(--border);
+  pointer-events: none;
+}
+
+/* Warmer tick for the current role */
+.t-entry--current::before {
+  background: rgba(224, 164, 88, 0.22);
+}
+
+/* ============================================================
+   CARDS — base
+   ============================================================ */
+
+.t-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left-width: 3px;
+  border-left-color: var(--border); /* default; overridden per employer */
+  border-radius: 4px;
+  padding: 20px 22px 20px 20px;
+}
+
+/* Per-employer left edge markers */
+.t-card--navy  { border-left-color: var(--navy); }
+.t-card--apple { border-left-color: var(--apple); }
+
+/* Current role card: amber edge + very subtly amber-tinted surface */
+.t-card--current {
+  border-left-width: 4px;
+  border-left-color: var(--accent);
+  /* Fallback for browsers without color-mix: */
+  background: #1A1912;
+  background: color-mix(in srgb, var(--surface) 91%, var(--accent) 9%);
+}
+
+/* ============================================================
+   CARD INTERNALS
+   ============================================================ */
+
+.t-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 7px;
+}
+
+.t-card-sep {
+  display: inline-block;
+  width: 1px;
+  height: 10px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.t-card-employer {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+}
+.t-card-employer--current { color: var(--accent); }
+
+.t-card-period {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+}
+.t-card-period--current { color: rgba(224, 164, 88, 0.65); }
+
+.t-card-role {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+  margin-bottom: 5px;
+}
+
+/* Card tagline — the triptych voice */
+.t-card-tagline {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  font-style: italic;
+  color: var(--text-secondary);
+  line-height: 1.45;
+  margin-bottom: 12px;
+}
+
+.t-card--current .t-card-tagline {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.t-card-body {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.68;
+  margin-bottom: 16px;
+}
+
+/* ============================================================
+   SKILL TAGS — mono chips, no border
+   ============================================================ */
+
+.t-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  row-gap: 5px;
+}
+
+.t-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* Leading 5px dot */
+.t-tag::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Navy tags: tinted with employer color at ~6% opacity */
+.t-tag--navy {
+  background: rgba(43, 76, 126, 0.09);
+}
+.t-tag--navy::before {
+  background: rgba(43, 76, 126, 0.65);
+}
+
+/* Apple tags */
+.t-tag--apple {
+  background: rgba(85, 90, 96, 0.10);
+}
+.t-tag--apple::before {
+  background: rgba(85, 90, 96, 0.60);
+}
+
+/* Microsoft / current tags: amber tint */
+.t-tag--msft {
+  background: rgba(224, 164, 88, 0.08);
+}
+.t-tag--msft::before {
+  background: rgba(224, 164, 88, 0.62);
+}
+
+/* ============================================================
+   SCHOOLS ANNOTATION
+   No card chrome. Bare text. Small gray dot.
+   Appears as marginalia attached to the Navy era.
+   ============================================================ */
+
+.t-annotation-entry {
+  padding-left: 20px;
+  padding-bottom: 18px;
+  padding-top: 0;
+}
+
+.t-annotation-inner {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding-left: 2px;
+}
+
+.t-annotation-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  flex-shrink: 0;
+  margin-top: 5px;
+  opacity: 0.45;
+}
+
+.t-annotation-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.t-annotation-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 0.625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
+
+.t-annotation-text {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  line-height: 1.55;
+}
+
+/* ============================================================
+   DEGREE BAND
+   Slim connector element, dashed border, round pill.
+   Floats between Apple and Microsoft.
+   ============================================================ */
+
+.t-degree-entry {
+  padding-left: 20px;
+  padding-bottom: 18px;
+  padding-top: 6px;
+}
+
+.degree-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 16px;
+  border: 1px dashed var(--border);
+  border-radius: 100px;
+  flex-wrap: wrap;
+  row-gap: 4px;
+}
+
+.degree-title {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.degree-abet {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-tertiary);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.degree-sep {
+  display: inline-block;
+  width: 1px;
+  height: 13px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.degree-note {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+}
+
+/* ============================================================
+   CONTACT SECTION
+   ============================================================ */
+
+.contact-section {
+  padding: 80px 0 100px;
+  border-top: 1px solid var(--border);
+}
+
+.contact-headline {
+  font-size: clamp(1.25rem, 3vw, 1.875rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.28;
+  color: var(--text-primary);
+  margin-bottom: 32px;
+}
+
+.contact-ctas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ============================================================
+   MOBILE BOTTOM ACTION BAR
+   ============================================================ */
+
+.mobile-bar {
+  /* Hidden on desktop; shown via media query */
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 150;
+  background: rgba(13, 15, 18, 0.92);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid var(--border);
+  padding: 12px 20px;
+  padding-bottom: calc(12px + env(safe-area-inset-bottom));
+  gap: 12px;
+  align-items: center;
+}
+
+.mobile-bar .btn {
+  flex: 1;
+}
+
+/* ============================================================
+   SCROLL REVEAL
+   IntersectionObserver animates opacity + translateY
+   ============================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity 700ms ease, transform 700ms ease;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   MOBILE — breakpoint at 640px
+   ============================================================ */
+
+@media (max-width: 640px) {
+
+  :root {
+    --pad-x: 18px;
+  }
+
+  /* Room for bottom bar */
+  body {
+    padding-bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+
+  /* Hero shrinks */
+  .hero {
+    min-height: 60vh;
+    min-height: 60svh; /* small viewport height — accounts for iOS chrome */
+    padding-top:    calc(var(--nav-h) + 40px);
+    padding-bottom: 40px;
+  }
+
+  .hero-headline {
+    font-size: 1.625rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero-lede {
+    font-size: 0.9375rem;
+  }
+
+  /* Hero CTAs move to bottom bar on mobile */
+  .hero-ctas {
+    display: none;
+  }
+
+  /* Nav keeps only the brand; links move to bottom bar */
+  .nav-links {
+    display: none;
+  }
+
+  /* Timeline spine shifts to left edge */
+  .timeline-track {
+    grid-template-columns: 28px 1fr;
+  }
+
+  .timeline-track::before {
+    left: 13px; /* center of 28px column */
+  }
+
+  /* Cards go full width */
+  .t-entry {
+    padding-left: 16px;
+    padding-bottom: 28px;
+  }
+
+  .t-card {
+    padding: 16px 18px 16px 16px;
+  }
+
+  /* Degree pill wraps more naturally */
+  .degree-pill {
+    border-radius: 8px;
+    gap: 8px;
+  }
+
+  /* Annotation entry */
+  .t-annotation-entry {
+    padding-left: 16px;
+  }
+
+  /* Degree entry */
+  .t-degree-entry {
+    padding-left: 16px;
+  }
+
+  /* Bottom bar becomes visible */
+  .mobile-bar {
+    display: flex;
+  }
+
+}
+
+  </style>
+</head>
+
+<body>
+
+  <!-- ============================================================
+       NAV
+       ============================================================ -->
+  <nav class="nav" role="navigation" aria-label="Site navigation">
+    <div class="nav-inner">
+      <a class="nav-brand" href="#top">Matt Moseley</a>
+      <div class="nav-links" aria-label="Quick links">
+        <a href="#timeline" class="nav-link">Path</a>
+        <a href="resume/Matt_Moseley_Resume.pdf"
+           class="btn btn--outline btn--sm"
+           target="_blank"
+           rel="noopener noreferrer">Resume</a>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ============================================================
+       HERO — compact left-aligned masthead
+       ============================================================ -->
+  <header class="hero" id="top">
+    <div class="container">
+
+      <p class="hero-eyebrow mono">Systems engineer — hardware to platform</p>
+
+      <h1 class="hero-headline">I keep the seam between hardware&nbsp;and software reliable.</h1>
+
+      <p class="hero-lede">Three employers, one constant — the layer where physical hardware becomes dependable software. Navy electronics taught me signals, Apple taught me scale, Microsoft taught me the platform underneath.</p>
+
+      <div class="hero-ctas">
+        <a href="resume/Matt_Moseley_Resume.pdf"
+           class="btn btn--primary"
+           target="_blank"
+           rel="noopener noreferrer">Resume PDF</a>
+        <a href="https://linkedin.com/in/YOUR_PROFILE"
+           class="btn btn--outline"
+           target="_blank"
+           rel="noopener noreferrer">LinkedIn</a>
+      </div>
+
+    </div>
+  </header>
+
+
+  <!-- ============================================================
+       CAREER TIMELINE
+       ============================================================ -->
+  <section class="timeline-section" id="timeline" aria-label="Career timeline">
+    <div class="container">
+      <div class="timeline-track">
+
+
+        <!-- ======================================================
+             U.S. NAVY  ·  2008 – 2013
+             ====================================================== -->
+
+        <div class="t-spine" aria-hidden="true">
+          <div class="t-dot t-dot--navy">
+            <!-- Anchor — simple hull + ring + flukes -->
+            <svg width="8" height="10" viewBox="0 0 8 10" fill="none"
+                 aria-hidden="true" focusable="false">
+              <circle cx="4" cy="1.8" r="1.3"
+                      stroke="currentColor" stroke-width="1.1"/>
+              <line x1="4" y1="3.1" x2="4" y2="9.0"
+                    stroke="currentColor" stroke-width="1.1"/>
+              <line x1="1" y1="5.3" x2="7" y2="5.3"
+                    stroke="currentColor" stroke-width="1.1"/>
+              <path d="M1 9.0 Q4 7.3 7 9.0"
+                    stroke="currentColor" stroke-width="1.1" fill="none"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="t-entry reveal">
+          <article class="t-card t-card--navy">
+            <header class="t-card-header">
+              <span class="mono t-card-employer">U.S. Navy</span>
+              <span class="t-card-sep" aria-hidden="true"></span>
+              <span class="mono t-card-period">2008 — 2013</span>
+            </header>
+            <h2 class="t-card-role">Electronics Technician</h2>
+            <p class="t-card-tagline">Learned to fix what couldn't fail.</p>
+            <p class="t-card-body">SATCOM and RF communication systems. Electronics maintenance, fault isolation, and troubleshooting in environments where the margin for error was zero.</p>
+            <div class="t-tags" aria-label="Skills">
+              <span class="t-tag t-tag--navy">RF</span>
+              <span class="t-tag t-tag--navy">SATCOM</span>
+              <span class="t-tag t-tag--navy">Electronics</span>
+              <span class="t-tag t-tag--navy">Troubleshooting</span>
+            </div>
+          </article>
+        </div>
+
+
+        <!-- ======================================================
+             SCHOOLS ANNOTATION — bare text, attached to Navy era
+             No card chrome. Small dot. Compact.
+             ====================================================== -->
+
+        <div class="t-spine t-spine--empty" aria-hidden="true"></div>
+
+        <div class="t-annotation-entry reveal" aria-label="Education during Navy service">
+          <div class="t-annotation-inner">
+            <span class="t-annotation-dot" aria-hidden="true"></span>
+            <div class="t-annotation-content">
+              <span class="t-annotation-label">Technical Schools · 2008 – 2013</span>
+              <span class="t-annotation-text">Navy electronics training, strategic communications, SHF/EHF satellite systems — concurrent with active service.</span>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- ======================================================
+             APPLE  ·  2013 – 2022
+             ====================================================== -->
+
+        <div class="t-spine" aria-hidden="true">
+          <div class="t-dot t-dot--apple">
+            <!-- RF signal waves — three concentric arcs -->
+            <svg width="10" height="8" viewBox="0 0 10 8" fill="none"
+                 aria-hidden="true" focusable="false">
+              <path d="M1 7.0 Q5 0.8 9 7.0"
+                    stroke="currentColor" stroke-width="1.1"/>
+              <path d="M3.2 7.0 Q5 3.8 6.8 7.0"
+                    stroke="currentColor" stroke-width="1.1"/>
+              <circle cx="5" cy="7.2" r="0.85" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="t-entry reveal">
+          <article class="t-card t-card--apple">
+            <header class="t-card-header">
+              <span class="mono t-card-employer">Apple</span>
+              <span class="t-card-sep" aria-hidden="true"></span>
+              <span class="mono t-card-period">2013 — 2022</span>
+            </header>
+            <h2 class="t-card-role">RF Systems Engineer</h2>
+            <p class="t-card-tagline">Scaled that to millions of devices.</p>
+            <p class="t-card-body">RF desense analysis, wireless validation, factory test automation, dry runs, lab debug, and systems integration — across product lines shipped at Apple scale.</p>
+            <div class="t-tags" aria-label="Skills">
+              <span class="t-tag t-tag--apple">RF Desense</span>
+              <span class="t-tag t-tag--apple">Wi-Fi</span>
+              <span class="t-tag t-tag--apple">Factory Test</span>
+              <span class="t-tag t-tag--apple">C++</span>
+              <span class="t-tag t-tag--apple">Swift</span>
+            </div>
+          </article>
+        </div>
+
+
+        <!-- ======================================================
+             DEGREE BAND — slim dashed pill connector
+             Floats between Apple and Microsoft
+             ====================================================== -->
+
+        <div class="t-spine t-spine--empty" aria-hidden="true"></div>
+
+        <div class="t-degree-entry reveal">
+          <div class="degree-pill">
+            <span class="degree-title">B.S. Engineering</span>
+            <span class="degree-abet" aria-label="ABET accredited">ABET</span>
+            <span class="degree-sep" aria-hidden="true"></span>
+            <span class="degree-note">Completed while working full time at Apple</span>
+          </div>
+        </div>
+
+
+        <!-- ======================================================
+             MICROSOFT  ·  2022 – PRESENT  ·  CURRENT ROLE
+             Full card, accent surface, filled dot, 4px left edge
+             The most visually prominent entry
+             ====================================================== -->
+
+        <div class="t-spine" aria-hidden="true">
+          <div class="t-dot t-dot--current">
+            <!-- Windows four-pane icon — 2×2 grid of small squares -->
+            <svg width="8" height="8" viewBox="0 0 8 8"
+                 aria-hidden="true" focusable="false">
+              <rect x="0"   y="0"   width="3.3" height="3.3" fill="currentColor"/>
+              <rect x="4.7" y="0"   width="3.3" height="3.3" fill="currentColor"/>
+              <rect x="0"   y="4.7" width="3.3" height="3.3" fill="currentColor"/>
+              <rect x="4.7" y="4.7" width="3.3" height="3.3" fill="currentColor"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="t-entry t-entry--current reveal">
+          <article class="t-card t-card--msft t-card--current">
+            <header class="t-card-header">
+              <span class="mono t-card-employer t-card-employer--current">Microsoft</span>
+              <span class="t-card-sep" aria-hidden="true"></span>
+              <span class="mono t-card-period t-card-period--current">2022 — Present</span>
+            </header>
+            <h2 class="t-card-role">Driver Quality / Platform Tooling</h2>
+            <p class="t-card-tagline">Now I build the tooling that keeps it reliable.</p>
+            <p class="t-card-body">Windows driver quality tools, WDK, HLK, Driver Verifier, certification workflows, and partner validation. The platform layer that every Windows driver must clear before it ships.</p>
+            <div class="t-tags" aria-label="Skills">
+              <span class="t-tag t-tag--msft">WDK</span>
+              <span class="t-tag t-tag--msft">HLK</span>
+              <span class="t-tag t-tag--msft">Driver Verifier</span>
+              <span class="t-tag t-tag--msft">C++</span>
+              <span class="t-tag t-tag--msft">Validation</span>
+            </div>
+          </article>
+        </div>
+
+
+      </div><!-- /.timeline-track -->
+    </div><!-- /.container -->
+  </section>
+
+
+  <!-- ============================================================
+       CONTACT
+       ============================================================ -->
+  <section class="contact-section" id="contact">
+    <div class="container">
+      <h2 class="contact-headline">Have a hard systems problem?<br>I'd like to hear it.</h2>
+      <div class="contact-ctas">
+        <a href="resume/Matt_Moseley_Resume.pdf"
+           class="btn btn--primary"
+           target="_blank"
+           rel="noopener noreferrer">Resume PDF</a>
+        <a href="https://linkedin.com/in/YOUR_PROFILE"
+           class="btn btn--outline"
+           target="_blank"
+           rel="noopener noreferrer">LinkedIn</a>
+        <a href="mailto:daniel.m.moseley@gmail.com"
+           class="btn btn--outline">Email</a>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============================================================
+       MOBILE BOTTOM ACTION BAR
+       Resume (primary) + Path (secondary) — replaces hidden nav links
+       ============================================================ -->
+  <div class="mobile-bar" role="navigation" aria-label="Quick actions">
+    <a href="resume/Matt_Moseley_Resume.pdf"
+       class="btn btn--primary"
+       target="_blank"
+       rel="noopener noreferrer">Resume</a>
+    <a href="#timeline" class="btn btn--outline">Path</a>
+  </div>
+
+
+  <!-- ============================================================
+       SCROLL REVEAL
+       IntersectionObserver · threshold 0.16 · 700ms ease
+       ============================================================ -->
+  <script>
+    (function () {
+      'use strict';
+
+      // Graceful degradation for very old browsers
+      if (typeof IntersectionObserver === 'undefined') {
+        document.querySelectorAll('.reveal').forEach(function (el) {
+          el.classList.add('revealed');
+        });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.16 });
+
+      document.querySelectorAll('.reveal').forEach(function (el) {
+        observer.observe(el);
+      });
+
+    }());
+  </script>
+
+</body>
+</html>
