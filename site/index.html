@@ -8,10 +8,10 @@
   <!-- Open Graph / Social -->
   <meta property="og:type" content="profile">
   <meta property="og:title" content="Matt Moseley — Systems Engineer">
-  <meta property="og:description" content="Navy to Apple to Microsoft. 15 years at the part where hardware meets software and someone has to make sure it doesn't fall over.">
+  <meta property="og:description" content="Fifteen years at the hardware-software seam. Navy RF systems to Apple wireless — hundreds of millions of iPhones — to Microsoft Windows driver tooling. Signal, noise, and where the two get confused.">
   <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Fonts: Space Grotesk replaces Inter. JetBrains Mono remains. -->
+  <!-- Fonts: Space Grotesk + JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -43,22 +43,35 @@
   --text-secondary: #9BA1AC;
   --text-tertiary:  #6B7280;
 
-  /* Accent — single warm amber, current role only */
+  /* Accent — warm amber */
   --accent:         #E0A458;
+  --accent-rgb:     224, 164, 88;
 
   /* Per-employer tones */
   --navy:           #2B4C7E;
-  --apple:          #7B8794;   /* upgraded from #555A60 — 9 years deserves to register */
+  --apple:          #7B8794;
   --msft:           #3A6EA5;
+
+  /* Timeline era color — mutated by JS as you scroll */
+  --line-color:     #1b3a6b;
+
+  /* Spacing scale */
+  --sp-2:  0.5rem;
+  --sp-3:  0.75rem;
+  --sp-4:  1rem;
+  --sp-6:  1.5rem;
+  --sp-8:  2rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
 
   /* Typography */
   --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Courier New', monospace;
 
   /* Layout */
-  --nav-h:   56px;
-  --max-w:   720px;
-  --pad-x:   28px;
+  --nav-h:  56px;
+  --max-w:  720px;
+  --pad-x:  28px;
 }
 
 /* ============================================================
@@ -105,7 +118,27 @@ img, svg { display: block; }
 }
 
 /* ============================================================
-   NAV — fixed, blur, semi-transparent
+   PROGRESS BAR — 3px fixed top, fills via scaleX
+   Background color tracks --line-color with smooth transition
+   ============================================================ */
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--line-color);
+  transform-origin: left center;
+  transform: scaleX(0);
+  z-index: 300;
+  pointer-events: none;
+  transition: background-color 600ms ease;
+}
+
+/* ============================================================
+   NAV — fixed, frosted glass
+   Resume always visible on all screen sizes
    ============================================================ */
 
 .nav {
@@ -113,7 +146,7 @@ img, svg { display: block; }
   inset: 0 0 auto 0;
   height: var(--nav-h);
   z-index: 200;
-  background: rgba(13, 15, 18, 0.76);
+  background: rgba(13, 15, 18, 0.80);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--border);
@@ -135,12 +168,13 @@ img, svg { display: block; }
   letter-spacing: -0.01em;
   color: var(--text-primary);
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .nav-links {
-  display: flex;
+  display: flex;     /* Always flex — never hide on mobile */
   align-items: center;
-  gap: 18px;
+  gap: 16px;
 }
 
 .nav-link {
@@ -149,6 +183,7 @@ img, svg { display: block; }
   color: var(--text-secondary);
   text-decoration: none;
   transition: color 160ms ease;
+  white-space: nowrap;
 }
 .nav-link:hover { color: var(--text-primary); }
 
@@ -171,6 +206,7 @@ img, svg { display: block; }
   cursor: pointer;
   border: 1.5px solid transparent;
   line-height: 1;
+  min-height: 48px;
   transition: opacity 140ms ease, border-color 140ms ease, color 140ms ease, background 140ms ease;
 }
 
@@ -192,24 +228,24 @@ img, svg { display: block; }
 }
 
 .btn--sm {
-  padding: 6px 14px;
+  padding: 6px 16px;
   font-size: 0.8125rem;
+  min-height: 36px;
 }
 
 /* ============================================================
-   HERO — spectrum waterfall texture, 38vh floor
+   HERO — RF waterfall texture, concentric arc antenna pattern
    ============================================================ */
 
 .hero {
+  position: relative;
+  overflow: hidden;
   min-height: 38vh;
-  padding-top:    calc(var(--nav-h) + 58px);
-  padding-bottom: 64px;
-  /* Spectrum waterfall: atmospheric, not literal.
-     If you've stared at a waterfall display you'll smile.
-     Everyone else just sees depth. */
+  padding-top:    calc(var(--nav-h) + 60px);
+  padding-bottom: var(--sp-16);
   background-color: var(--bg);
   background-image:
-    /* Horizontal frequency-bin lines — ~1.3% amber every 31px */
+    /* Horizontal frequency-bin lines */
     repeating-linear-gradient(
       180deg,
       transparent 0px,
@@ -217,7 +253,7 @@ img, svg { display: block; }
       rgba(224, 164, 88, 0.013) 30px,
       rgba(224, 164, 88, 0.013) 31px
     ),
-    /* Warm amber bloom — where signal energy concentrates */
+    /* Warm amber bloom */
     radial-gradient(
       ellipse 78% 54% at 22% 62%,
       rgba(224, 164, 88, 0.036) 0%,
@@ -226,10 +262,30 @@ img, svg { display: block; }
     );
 }
 
+/* Antenna radiation pattern — concentric arcs, top right, partially offscreen */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  right: -80px;
+  width: 420px;
+  height: 420px;
+  background: repeating-radial-gradient(
+    circle at center,
+    transparent 0px,
+    transparent 48px,
+    rgba(var(--accent-rgb), 0.04) 49px,
+    rgba(var(--accent-rgb), 0.04) 50px,
+    transparent 51px
+  );
+  border-radius: 50%;
+  pointer-events: none;
+}
+
 .hero-eyebrow {
   font-size: 0.6875rem;
   color: var(--text-tertiary);
-  margin-bottom: 16px;
+  margin-bottom: var(--sp-4);
 }
 
 .hero-headline {
@@ -239,15 +295,15 @@ img, svg { display: block; }
   letter-spacing: -0.02em;
   color: var(--text-primary);
   max-width: 580px;
-  margin-bottom: 20px;
+  margin-bottom: var(--sp-4);
 }
 
 .hero-lede {
   font-size: 1rem;
   color: var(--text-secondary);
-  max-width: 480px;
+  max-width: 500px;
   line-height: 1.72;
-  margin-bottom: 36px;
+  margin-bottom: var(--sp-8);
 }
 
 .hero-ctas {
@@ -258,12 +314,53 @@ img, svg { display: block; }
 }
 
 /* ============================================================
+   HERO ENTRANCE ANIMATION
+   Elements start invisible; JS adds .hero--visible with stagger
+   ============================================================ */
+
+.hero-eyebrow,
+.hero-headline,
+.hero-lede,
+.hero-ctas {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 600ms ease, transform 600ms ease;
+}
+
+.hero-eyebrow.hero--visible,
+.hero-headline.hero--visible,
+.hero-lede.hero--visible,
+.hero-ctas.hero--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
+   REVEAL — base class for scroll-driven entrance
+   Override transform per element type as needed
+   --reveal-delay CSS var enables staggered reveals
+   ============================================================ */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity  700ms ease var(--reveal-delay, 0ms),
+    transform 700ms ease var(--reveal-delay, 0ms);
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============================================================
    TRIPTYCH — standalone emotional spine
-   Between hero and timeline. Three lines. Amber does real work.
+   Between hero and timeline. Lines reveal with translateX.
    ============================================================ */
 
 .triptych-section {
-  padding: 48px 0 52px;
+  padding: var(--sp-12) 0;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
 }
@@ -271,12 +368,20 @@ img, svg { display: block; }
 .triptych {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  margin-bottom: 20px;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+
+/* Override .reveal's translateY with translateX for triptych */
+.triptych-line.reveal {
+  transform: translateX(-24px);
+}
+.triptych-line.reveal.revealed {
+  transform: translateX(0);
 }
 
 .triptych-line {
-  font-size: clamp(1.125rem, 2.1vw, 1.375rem);
+  font-size: clamp(1.0625rem, 2.1vw, 1.375rem);
   font-weight: 500;
   line-height: 1.48;
   color: var(--text-secondary);
@@ -289,7 +394,7 @@ img, svg { display: block; }
 
 .one-sentence {
   font-size: 0.875rem;
-  color: var(--text-secondary);
+  color: var(--text-tertiary);
   font-style: italic;
   opacity: 0.72;
 }
@@ -299,11 +404,11 @@ img, svg { display: block; }
    ============================================================ */
 
 .timeline-section {
-  padding-top:    4px;
-  padding-bottom: 104px;
+  padding-top: var(--sp-4);
+  padding-bottom: var(--sp-16);
 }
 
-/* ---- Two-column CSS grid spine — NOT absolute positioned ---- */
+/* ---- Two-column CSS grid spine ---- */
 
 .timeline-track {
   display: grid;
@@ -311,17 +416,82 @@ img, svg { display: block; }
   position: relative;
 }
 
-/* The continuous 1px vertical hairline rule */
+/* Static hairline — full extent of the track */
 .timeline-track::before {
   content: '';
   position: absolute;
-  left: 18px;       /* horizontal center of the 38px spine column */
-  top:  28px;       /* starts at first dot center */
+  left: 18px;      /* center of 38px spine column */
+  top:  28px;
   bottom: 20px;
   width: 1px;
   background: var(--border);
   z-index: 0;
   pointer-events: none;
+}
+
+/* ============================================================
+   TIMELINE FILL — scroll-driven, grows via scaleY
+   Overlays the hairline with --line-color that shifts per era
+   ============================================================ */
+
+.timeline__fill {
+  position: absolute;
+  left: 17px;      /* 18px center minus 1px for centering 2px fill */
+  top: 28px;
+  height: calc(100% - 48px);
+  width: 2px;
+  background-color: var(--line-color);
+  transform-origin: top center;
+  transform: scaleY(0);
+  z-index: 1;
+  pointer-events: none;
+  transition: background-color 600ms ease;
+}
+
+/* ============================================================
+   CHAPTER BREAK DIVIDERS
+   Span full width, fade+scale in on viewport entry
+   Year text uses --line-color (shifts per era)
+   ============================================================ */
+
+.chapter {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-8) 0 var(--sp-4);
+}
+
+/* Override .reveal default for chapters: scale+Y */
+.chapter.reveal {
+  transform: scale(0.96) translateY(8px);
+}
+.chapter.reveal.revealed {
+  transform: scale(1) translateY(0);
+}
+
+.chapter__year {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--line-color);
+  transition: color 600ms ease;
+  flex-shrink: 0;
+}
+
+.chapter__label {
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  letter-spacing: 0.01em;
+  flex-shrink: 0;
+}
+
+.chapter__rule {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
 }
 
 /* ============================================================
@@ -337,13 +507,16 @@ img, svg { display: block; }
   z-index: 1;
 }
 
+/* Empty spine cells just pass the hairline through — no reveal needed */
 .t-spine--empty {
-  /* No dot — spine line simply passes through */
   padding-top: 0;
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 /* ============================================================
    TIMELINE DOTS
+   Start small; activate with scale+glow via IntersectionObserver
    ============================================================ */
 
 .t-dot {
@@ -358,97 +531,139 @@ img, svg { display: block; }
   justify-content: center;
   position: relative;
   z-index: 2;
+  transform: scale(0.72);
+  transition:
+    transform   400ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow  400ms ease;
 }
 
-/* Hollow ring: employer-colored outline */
+.t-dot.dot--active {
+  transform: scale(1);
+}
+
+/* Per-employer ring colors */
 .t-dot--navy  { border-color: var(--navy); }
 .t-dot--apple { border-color: var(--apple); }
 
-.t-dot svg {
-  pointer-events: none;
-  display: block;
-  flex-shrink: 0;
-}
+/* Glow rings on activation */
+.t-dot--navy.dot--active  { box-shadow: 0 0 0 4px rgba(43,  76, 126, 0.22); }
+.t-dot--apple.dot--active { box-shadow: 0 0 0 4px rgba(123, 135, 148, 0.18); }
 
-/* Icon tint matches ring */
-.t-dot--navy  svg { color: var(--navy); }
-.t-dot--apple svg { color: var(--apple); }
-
-/* Current role: solid amber fill, slightly larger */
+/* Current role — solid amber fill, slightly larger */
 .t-dot--current {
   width:  16px;
   height: 16px;
   background: var(--accent);
   border-color: var(--accent);
 }
+.t-dot--current.dot--active { box-shadow: 0 0 0 5px rgba(224, 164, 88, 0.24); }
+
+/* Icon tints */
+.t-dot svg { pointer-events: none; display: block; flex-shrink: 0; }
+.t-dot--navy  svg { color: var(--navy); }
+.t-dot--apple svg { color: var(--apple); }
 .t-dot--current svg { color: var(--bg); }
 
 /* ============================================================
    ENTRY CELLS (column 2)
+   Slight delay behind spine so dot pops first, card slides in after
    ============================================================ */
 
 .t-entry {
   position: relative;
   padding-left: 20px;
-  padding-bottom: 36px;
+  padding-bottom: var(--sp-6);
+  --reveal-delay: 80ms;  /* Card follows dot */
 }
 
-/* Short horizontal tick connector: spine dot → card left edge */
+/* Horizontal tick connector: spine dot → card left edge */
 .t-entry::before {
   content: '';
   position: absolute;
   left: 0;
-  top: 25px;  /* ~dot vertical center */
+  top: 25px;
   width: 14px;
   height: 1px;
   background: var(--border);
   pointer-events: none;
 }
-
-/* Warmer tick for the current role */
 .t-entry--current::before {
   background: rgba(224, 164, 88, 0.22);
 }
 
 /* ============================================================
    CARDS — base
+   Full-width expandable containers with colored left edge
    ============================================================ */
 
-.t-card {
+.card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-left-width: 3px;
   border-left-color: var(--border);
   border-radius: 4px;
-  padding: 20px 22px 20px 20px;
+  overflow: hidden;   /* clips expand animation + textures */
 }
 
-/* Per-employer left edge markers */
-.t-card--navy  { border-left-color: var(--navy); }
-.t-card--apple { border-left-color: var(--apple); }   /* #7B8794 — registers now */
+.card--navy  { border-left-color: var(--navy); }
+.card--apple { border-left-color: var(--apple); }
 
-/* Current role card: amber edge + very subtly amber-tinted surface */
-.t-card--current {
+.card--current {
   border-left-width: 4px;
   border-left-color: var(--accent);
-  /* Fallback for browsers without color-mix: */
   background: #1A1912;
   background: color-mix(in srgb, var(--surface) 91%, var(--accent) 9%);
 }
 
 /* ============================================================
-   CARD INTERNALS
+   CARD TOGGLE BUTTON
+   The WHOLE card face is tappable (button = full width).
+   Chevron sits top-right in the header row.
    ============================================================ */
 
-.t-card-header {
+.card__toggle {
+  width: 100%;
+  background: none;
+  border: none;
+  border-bottom: 1px solid transparent;
+  padding: var(--sp-4);
+  padding-right: calc(var(--sp-4) + 30px);  /* room for chevron */
+  text-align: left;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  position: relative;
+  transition: border-color 200ms ease;
+  min-height: 48px;
+}
+
+.card__toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: 4px;
+}
+
+.card[data-open] .card__toggle {
+  border-bottom-color: var(--border);
+}
+
+/* Card header: meta line (employer · period) */
+.card__meta {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 7px;
 }
 
-.t-card-sep {
+.card__employer {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+}
+.card--current .card__employer { color: var(--accent); }
+
+.card__sep {
   display: inline-block;
   width: 1px;
   height: 10px;
@@ -456,76 +671,194 @@ img, svg { display: block; }
   flex-shrink: 0;
 }
 
-.t-card-employer {
+.card__period {
   font-size: 0.6875rem;
   color: var(--text-tertiary);
 }
-.t-card-employer--current { color: var(--accent); }
+.card--current .card__period { color: rgba(224, 164, 88, 0.65); }
 
-.t-card-period {
-  font-size: 0.6875rem;
-  color: var(--text-tertiary);
-}
-.t-card-period--current { color: rgba(224, 164, 88, 0.65); }
-
-.t-card-role {
+/* Role heading */
+.card__role {
   font-size: 1.0625rem;
   font-weight: 600;
   color: var(--text-primary);
   letter-spacing: -0.01em;
   line-height: 1.3;
-  margin-bottom: 5px;
 }
 
-/* Card tagline — Matt's actual voice. Not italic. Not editorial. */
-.t-card-tagline {
+/* One-line headline — Matt's voice, not editorial copy */
+.card__headline {
   font-size: 0.9375rem;
   font-weight: 500;
   color: var(--text-secondary);
   line-height: 1.5;
-  margin-bottom: 12px;
 }
-
-/* Current role tagline: amber, slightly heavier */
-.t-card--current .t-card-tagline {
+.card--current .card__headline {
   font-weight: 600;
   color: var(--accent);
 }
 
-.t-card-body {
-  font-size: 0.875rem;
+/* Chips preview: visible in collapsed state (inside toggle, aria-hidden) */
+.card__chips-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: var(--sp-2);
+  pointer-events: none;
+}
+
+/* Chevron — rotates 180° on expand */
+.card__chevron {
+  position: absolute;
+  top: var(--sp-4);
+  right: var(--sp-4);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-tertiary);
+  transition: transform 380ms cubic-bezier(0.4, 0, 0.2, 1), color 200ms ease;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+.card[data-open] .card__chevron {
+  transform: rotate(180deg);
   color: var(--text-secondary);
-  line-height: 1.68;
-  margin-bottom: 12px;
 }
 
 /* ============================================================
-   SHIPPED PRODUCTS — mono evidence line
+   EXPAND ANIMATION
+   grid-template-rows: 0fr → 1fr technique
+   Smooth, hardware-accelerated, no JS height calculation needed
    ============================================================ */
 
-.shipped {
+.card__detail {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 380ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card[data-open] .card__detail {
+  grid-template-rows: 1fr;
+}
+
+/* Inner wrapper must have overflow: hidden + min-height: 0 for the trick to work */
+.card__detail > * {
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ============================================================
+   CARD DETAIL INNER — expanded content area
+   position: relative so ::before texture is contained
+   ============================================================ */
+
+.card__detail-inner {
+  position: relative;
+  padding: var(--sp-4);
+  padding-top: var(--sp-3);
+}
+
+/* ============================================================
+   CSS TEXTURES — per-era decorative backgrounds in expanded state
+   Very low opacity; purely atmospheric
+   ============================================================ */
+
+/* Navy: radar/concentric circle arcs emanating from right */
+.card--navy .card__detail-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-radial-gradient(
+    circle at 95% 50%,
+    transparent 0px,
+    transparent 38px,
+    rgba(43, 76, 126, 0.06) 39px,
+    rgba(43, 76, 126, 0.06) 40px,
+    transparent 41px
+  );
+}
+
+/* Apple: spectrum analyzer bands — horizontal amber/graphite lines */
+.card--apple .card__detail-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0px,
+      transparent 14px,
+      rgba(224, 164, 88, 0.04) 14px,
+      rgba(224, 164, 88, 0.04) 15px,
+      transparent 16px,
+      transparent 23px,
+      rgba(123, 135, 148, 0.04) 23px,
+      rgba(123, 135, 148, 0.04) 24px,
+      transparent 25px
+    );
+}
+
+/* Microsoft: circuit board grid */
+.card--msft .card__detail-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(58, 110, 165, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(58, 110, 165, 0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Expanded content sits above texture in paint order */
+.card__body,
+.card__shipped,
+.card__none,
+.card__full-tags {
+  position: relative;
+}
+
+.card__body {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.68;
+  margin-bottom: var(--sp-3);
+}
+
+/* Shipped products — mono evidence row */
+.card__shipped {
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--text-tertiary);
-  margin-top: 2px;
-  margin-bottom: 14px;
+  margin-bottom: var(--sp-4);
 }
 
-/* ============================================================
-   SKILL TAGS — mono chips, no border
-   ============================================================ */
+/* Military "no commercial products" note */
+.card__none {
+  font-size: 0.8125rem;
+  color: var(--text-tertiary);
+  font-style: italic;
+  margin-bottom: var(--sp-4);
+}
 
-.t-tags {
+.card__full-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  row-gap: 5px;
 }
 
-.t-tag {
+/* ============================================================
+   SKILL CHIPS — mono, colored dot prefix
+   ============================================================ */
+
+.chip {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -540,8 +873,7 @@ img, svg { display: block; }
   white-space: nowrap;
 }
 
-/* Leading 5px dot */
-.t-tag::before {
+.chip::before {
   content: '';
   display: inline-block;
   width: 5px;
@@ -550,38 +882,23 @@ img, svg { display: block; }
   flex-shrink: 0;
 }
 
-.t-tag--navy {
-  background: rgba(43, 76, 126, 0.09);
-}
-.t-tag--navy::before {
-  background: rgba(43, 76, 126, 0.65);
-}
+.chip--navy  { background: rgba(43,  76, 126, 0.09); }
+.chip--navy::before  { background: rgba(43,  76, 126, 0.65); }
 
-/* Apple tags — updated to match new --apple value (#7B8794) */
-.t-tag--apple {
-  background: rgba(123, 135, 148, 0.10);
-}
-.t-tag--apple::before {
-  background: rgba(123, 135, 148, 0.60);
-}
+.chip--apple { background: rgba(123, 135, 148, 0.10); }
+.chip--apple::before { background: rgba(123, 135, 148, 0.60); }
 
-/* Microsoft / current tags: amber tint */
-.t-tag--msft {
-  background: rgba(224, 164, 88, 0.08);
-}
-.t-tag--msft::before {
-  background: rgba(224, 164, 88, 0.62);
-}
+.chip--msft  { background: rgba(224, 164, 88,  0.08); }
+.chip--msft::before  { background: rgba(224, 164, 88,  0.62); }
 
 /* ============================================================
    SCHOOLS ANNOTATION
    No card chrome. Bare text. Small gray dot.
-   Appears as marginalia attached to the Navy era.
    ============================================================ */
 
 .t-annotation-entry {
   padding-left: 20px;
-  padding-bottom: 18px;
+  padding-bottom: var(--sp-4);
   padding-top: 0;
 }
 
@@ -598,7 +915,7 @@ img, svg { display: block; }
   border-radius: 50%;
   background: var(--text-tertiary);
   flex-shrink: 0;
-  margin-top: 5px;
+  margin-top: 6px;
   opacity: 0.45;
 }
 
@@ -624,15 +941,13 @@ img, svg { display: block; }
 }
 
 /* ============================================================
-   DEGREE BAND
-   Slim connector element, dashed border, round pill.
-   Floats between Apple and Microsoft.
+   DEGREE BAND — slim dashed pill between Apple and Microsoft
    ============================================================ */
 
 .t-degree-entry {
   padding-left: 20px;
-  padding-bottom: 18px;
-  padding-top: 6px;
+  padding-bottom: var(--sp-4);
+  padding-top: var(--sp-3);
 }
 
 .degree-pill {
@@ -682,7 +997,8 @@ img, svg { display: block; }
    ============================================================ */
 
 .contact-section {
-  padding: 80px 0 100px;
+  padding: var(--sp-16) 0;
+  padding-bottom: max(var(--sp-12), env(safe-area-inset-bottom));
   border-top: 1px solid var(--border);
 }
 
@@ -692,7 +1008,7 @@ img, svg { display: block; }
   letter-spacing: -0.02em;
   line-height: 1.28;
   color: var(--text-primary);
-  margin-bottom: 10px;
+  margin-bottom: var(--sp-3);
 }
 
 .contact-meta {
@@ -702,59 +1018,60 @@ img, svg { display: block; }
   text-transform: uppercase;
   letter-spacing: 0.04em;
   color: var(--text-tertiary);
-  margin-bottom: 28px;
+  margin-bottom: var(--sp-8);
+  --reveal-delay: 100ms;
 }
 
 .contact-ctas {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+  --reveal-delay: 220ms;
 }
 
 /* ============================================================
-   MOBILE BOTTOM ACTION BAR
+   PREFERS-REDUCED-MOTION
+   Everything visible, zero animation. Still fully navigable.
    ============================================================ */
 
-.mobile-bar {
-  /* Hidden on desktop; shown via media query */
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 150;
-  background: rgba(13, 15, 18, 0.92);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-top: 1px solid var(--border);
-  padding: 12px 20px;
-  padding-bottom: calc(12px + env(safe-area-inset-bottom));
-  gap: 12px;
-  align-items: center;
-}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    transition-delay:    0ms    !important;
+  }
 
-.mobile-bar .btn {
-  flex: 1;
+  /* Force all animated elements visible */
+  .hero-eyebrow,
+  .hero-headline,
+  .hero-lede,
+  .hero-ctas {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .reveal,
+  .triptych-line.reveal,
+  .chapter.reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .t-dot {
+    transform: scale(1) !important;
+  }
+
+  .timeline__fill {
+    transform: scaleY(1) !important;
+  }
+
+  .progress {
+    transform: scaleX(1) !important;
+  }
 }
 
 /* ============================================================
-   SCROLL REVEAL
-   IntersectionObserver animates opacity + translateY
-   ============================================================ */
-
-.reveal {
-  opacity: 0;
-  transform: translateY(26px);
-  transition: opacity 700ms ease, transform 700ms ease;
-}
-
-.reveal.revealed {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ============================================================
-   MOBILE — breakpoint at 640px
+   MOBILE — breakpoint 640px
    ============================================================ */
 
 @media (max-width: 640px) {
@@ -763,16 +1080,12 @@ img, svg { display: block; }
     --pad-x: 18px;
   }
 
-  /* Room for bottom bar */
-  body {
-    padding-bottom: calc(68px + env(safe-area-inset-bottom));
-  }
-
-  /* Hero shrinks */
+  /* Hero: taller minimum on mobile, svh with vh fallback */
   .hero {
-    min-height: 56svh; /* small viewport height — accounts for iOS chrome */
+    min-height: 60vh;
+    min-height: 60svh;
     padding-top:    calc(var(--nav-h) + 40px);
-    padding-bottom: 44px;
+    padding-bottom: var(--sp-12);
   }
 
   .hero-headline {
@@ -784,65 +1097,66 @@ img, svg { display: block; }
     font-size: 0.9375rem;
   }
 
-  /* Hero CTAs move to bottom bar on mobile */
-  .hero-ctas {
+  /* Nav: hide "Path" link on mobile, always keep Résumé */
+  .nav-link--path {
     display: none;
   }
 
-  /* Nav keeps only the brand; links move to bottom bar */
-  .nav-links {
-    display: none;
-  }
-
-  /* Triptych tightens */
+  /* Triptych: tighten */
   .triptych-section {
-    padding: 36px 0 40px;
+    padding: var(--sp-8) 0;
   }
 
   .triptych-line {
     font-size: 1.0625rem;
   }
 
-  /* Timeline spine shifts to left edge */
+  /* Timeline: narrower spine column */
   .timeline-track {
     grid-template-columns: 28px 1fr;
   }
 
   .timeline-track::before {
-    left: 13px; /* center of 28px column */
+    left: 13px;   /* center of 28px column */
   }
 
-  /* Cards go full width */
+  .timeline__fill {
+    left: 12px;
+  }
+
+  /* Entry cells: tighter padding */
   .t-entry {
     padding-left: 16px;
-    padding-bottom: 28px;
+    padding-bottom: var(--sp-6);
   }
 
-  .t-card {
-    padding: 16px 18px 16px 16px;
+  /* Cards on mobile: reduce padding, add right padding for chevron */
+  .card__toggle {
+    padding: var(--sp-3);
+    padding-right: calc(var(--sp-3) + 28px);
   }
 
-  /* Degree pill wraps more naturally */
+  .card__detail-inner {
+    padding: var(--sp-3);
+  }
+
+  /* Annotations and degree */
+  .t-annotation-entry,
+  .t-degree-entry {
+    padding-left: 16px;
+  }
+
+  /* Degree pill: rectangular on small screens */
   .degree-pill {
     border-radius: 8px;
     gap: 8px;
   }
 
-  /* Annotation entry */
-  .t-annotation-entry {
-    padding-left: 16px;
+  /* Contact: safe area padding */
+  .contact-section {
+    padding: var(--sp-12) 0;
+    padding-bottom: max(var(--sp-12), env(safe-area-inset-bottom));
   }
-
-  /* Degree entry */
-  .t-degree-entry {
-    padding-left: 16px;
-  }
-
-  /* Bottom bar becomes visible */
-  .mobile-bar {
-    display: flex;
-  }
-
 }
 
   </style>
@@ -851,39 +1165,46 @@ img, svg { display: block; }
 <body>
 
   <!-- ============================================================
-       NAV
+       PROGRESS BAR — 3px fixed top, fills with scroll
+       ============================================================ -->
+  <div class="progress" id="progress" aria-hidden="true" role="presentation"></div>
+
+
+  <!-- ============================================================
+       NAV — frosted glass, Matt Moseley left + Résumé right
+       Résumé is always visible on all screen sizes
        ============================================================ -->
   <nav class="nav" role="navigation" aria-label="Site navigation">
     <div class="nav-inner">
       <a class="nav-brand" href="#top">Matt Moseley</a>
       <div class="nav-links" aria-label="Quick links">
-        <a href="#timeline" class="nav-link">Path</a>
+        <a href="#timeline" class="nav-link nav-link--path">Path</a>
         <a href="resume/Matt_Moseley_Resume.pdf"
            class="btn btn--outline btn--sm"
            target="_blank"
-           rel="noopener noreferrer">Resume</a>
+           rel="noopener noreferrer">Résumé</a>
       </div>
     </div>
   </nav>
 
 
   <!-- ============================================================
-       HERO — spectrum waterfall texture, Matt's actual voice
+       HERO — two-paragraph intro, RF textures, entrance stagger
        ============================================================ -->
   <header class="hero" id="top">
     <div class="container">
 
       <p class="hero-eyebrow mono">Systems engineer — hardware to platform</p>
 
-      <h1 class="hero-headline">I'm Matt. I work on the part where hardware meets software and try to make sure it doesn't fall over.</h1>
+      <h1 class="hero-headline">I'm Matt. I work where hardware meets software — the seam where things tend to break — and I've spent fifteen years making sure they don't.</h1>
 
-      <p class="hero-lede">Started in audio — hence "thesoundman" — and somehow ended up in systems. Turns out the skills transfer.</p>
+      <p class="hero-lede">I started in audio — hence the old handle, thesoundman — and worked into RF and systems engineering. The fundamentals carried further than I expected: signal, noise, and where the two get confused.</p>
 
       <div class="hero-ctas">
         <a href="resume/Matt_Moseley_Resume.pdf"
            class="btn btn--primary"
            target="_blank"
-           rel="noopener noreferrer">Resume PDF</a>
+           rel="noopener noreferrer">Résumé PDF</a>
         <a href="https://linkedin.com/in/YOUR_PROFILE"
            class="btn btn--outline"
            target="_blank"
@@ -895,15 +1216,21 @@ img, svg { display: block; }
 
 
   <!-- ============================================================
-       TRIPTYCH — standalone emotional spine
-       Three lines. The arc of the whole thing in ~40 words.
+       TRIPTYCH — three lines, the arc of the whole career
+       Reveals with staggered translateX
        ============================================================ -->
   <section class="triptych-section" aria-label="Career arc">
     <div class="container">
-      <div class="triptych reveal">
-        <p class="triptych-line">Learned to fix things <span class="triptych-accent">before they failed.</span></p>
-        <p class="triptych-line">That ended up on <span class="triptych-accent">a few million iPhones.</span></p>
-        <p class="triptych-line">Now I make the tooling so <span class="triptych-accent">nobody else has to lose sleep</span> over it.</p>
+      <div class="triptych">
+        <p class="triptych-line reveal" style="--reveal-delay: 0ms">
+          Learned to fix things <span class="triptych-accent">before they failed.</span>
+        </p>
+        <p class="triptych-line reveal" style="--reveal-delay: 130ms">
+          That ended up in <span class="triptych-accent">a few hundred million iPhones.</span>
+        </p>
+        <p class="triptych-line reveal" style="--reveal-delay: 260ms">
+          Now I make the tooling so the failure <span class="triptych-accent">gets caught in the lab, not at 2am.</span>
+        </p>
       </div>
       <p class="one-sentence">Probably the only resume with both AirPods and Driver Verifier on it.</p>
     </div>
@@ -912,19 +1239,34 @@ img, svg { display: block; }
 
   <!-- ============================================================
        CAREER TIMELINE
+       Scroll-driven fill line + expandable cards + chapter breaks
        ============================================================ -->
   <section class="timeline-section" id="timeline" aria-label="Career timeline">
     <div class="container">
-      <div class="timeline-track">
+      <div class="timeline-track" id="timeline-track">
+
+        <!-- Scroll-driven fill line (JS sets scaleY) -->
+        <div class="timeline__fill" id="timeline-fill" aria-hidden="true"></div>
 
 
         <!-- ======================================================
-             U.S. NAVY  ·  2008 – 2013
+             CHAPTER: NAVY ERA START
              ====================================================== -->
 
-        <div class="t-spine" aria-hidden="true">
+        <div class="chapter reveal" data-chapter data-era="navy" aria-label="Era start: U.S. Navy">
+          <span class="chapter__year">2008</span>
+          <span class="chapter__label">U.S. Navy</span>
+          <span class="chapter__rule" aria-hidden="true"></span>
+        </div>
+
+
+        <!-- ======================================================
+             U.S. NAVY — 2008–2013
+             ====================================================== -->
+
+        <div class="t-spine reveal" aria-hidden="true">
           <div class="t-dot t-dot--navy">
-            <!-- Anchor — simple hull + ring + flukes -->
+            <!-- Anchor icon: hull + flukes -->
             <svg width="8" height="10" viewBox="0 0 8 10" fill="none"
                  aria-hidden="true" focusable="false">
               <circle cx="4" cy="1.8" r="1.3"
@@ -939,29 +1281,59 @@ img, svg { display: block; }
           </div>
         </div>
 
-        <div class="t-entry reveal">
-          <article class="t-card t-card--navy">
-            <header class="t-card-header">
-              <span class="mono t-card-employer">U.S. Navy</span>
-              <span class="t-card-sep" aria-hidden="true"></span>
-              <span class="mono t-card-period">2008 — 2013</span>
-            </header>
-            <h2 class="t-card-role">Electronics Technician</h2>
-            <p class="t-card-tagline">Learned to fix things before they failed, because failing wasn't really an option.</p>
-            <p class="t-card-body">SATCOM and RF communication systems. Electronics maintenance, fault isolation, and troubleshooting in environments where the margin for error was zero.</p>
-            <div class="t-tags" aria-label="Skills">
-              <span class="t-tag t-tag--navy">RF</span>
-              <span class="t-tag t-tag--navy">SATCOM</span>
-              <span class="t-tag t-tag--navy">Electronics</span>
-              <span class="t-tag t-tag--navy">Troubleshooting</span>
+        <div class="t-entry reveal" data-era="navy">
+          <article class="card card--navy" data-era="navy">
+
+            <button class="card__toggle"
+                    aria-expanded="false"
+                    aria-controls="navy-panel"
+                    aria-label="U.S. Navy, Electronics Technician — tap to expand">
+              <div class="card__meta">
+                <span class="card__employer mono">U.S. Navy</span>
+                <span class="card__sep" aria-hidden="true"></span>
+                <span class="card__period mono">2008 — 2013</span>
+              </div>
+              <h2 class="card__role" id="navy-role">Electronics Technician</h2>
+              <p class="card__headline">I learned to find the fault before it found us.</p>
+              <div class="card__chips-preview" aria-hidden="true">
+                <span class="chip chip--navy">RF</span>
+                <span class="chip chip--navy">SATCOM</span>
+                <span class="chip chip--navy">Electronics</span>
+                <span class="chip chip--navy">Fault Isolation</span>
+              </div>
+              <span class="card__chevron" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                     aria-hidden="true">
+                  <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="card__detail" id="navy-panel" role="region" aria-labelledby="navy-role">
+              <div>
+                <div class="card__detail-inner">
+                  <p class="card__body">SATCOM, RF communication systems, electronics maintenance, fault isolation, and operational troubleshooting. On shipboard gear, there was no margin to work any other way.</p>
+                  <p class="card__none">No commercial products shipped — military service.</p>
+                  <div class="card__full-tags" aria-label="Skills">
+                    <span class="chip chip--navy">RF</span>
+                    <span class="chip chip--navy">SATCOM</span>
+                    <span class="chip chip--navy">Electronics</span>
+                    <span class="chip chip--navy">SHF/EHF</span>
+                    <span class="chip chip--navy">Fault Isolation</span>
+                    <span class="chip chip--navy">Troubleshooting</span>
+                  </div>
+                </div>
+              </div>
             </div>
+
           </article>
         </div>
 
 
         <!-- ======================================================
-             SCHOOLS ANNOTATION — bare text, attached to Navy era
-             No card chrome. Small dot. Compact.
+             SCHOOLS ANNOTATION — attached to Navy era
+             Small dot, no card chrome
              ====================================================== -->
 
         <div class="t-spine t-spine--empty" aria-hidden="true"></div>
@@ -970,7 +1342,7 @@ img, svg { display: block; }
           <div class="t-annotation-inner">
             <span class="t-annotation-dot" aria-hidden="true"></span>
             <div class="t-annotation-content">
-              <span class="t-annotation-label">Technical Schools · 2008 – 2013</span>
+              <span class="t-annotation-label">Technical Schools · 2008–2013</span>
               <span class="t-annotation-text">Navy electronics training, strategic communications, SHF/EHF satellite systems — concurrent with active service.</span>
             </div>
           </div>
@@ -978,12 +1350,24 @@ img, svg { display: block; }
 
 
         <!-- ======================================================
-             APPLE  ·  2013 – 2022
+             CHAPTER BREAK: Navy → Apple
+             Era color shifts to Apple graphite when this enters view
              ====================================================== -->
 
-        <div class="t-spine" aria-hidden="true">
+        <div class="chapter reveal" data-chapter data-era="apple" aria-label="Transition: Navy to Apple">
+          <span class="chapter__year">2013</span>
+          <span class="chapter__label">Navy → Apple</span>
+          <span class="chapter__rule" aria-hidden="true"></span>
+        </div>
+
+
+        <!-- ======================================================
+             APPLE — 2013–2022
+             ====================================================== -->
+
+        <div class="t-spine reveal" aria-hidden="true">
           <div class="t-dot t-dot--apple">
-            <!-- RF signal waves — three concentric arcs -->
+            <!-- RF signal waves: three concentric arcs -->
             <svg width="10" height="8" viewBox="0 0 10 8" fill="none"
                  aria-hidden="true" focusable="false">
               <path d="M1 7.0 Q5 0.8 9 7.0"
@@ -995,36 +1379,65 @@ img, svg { display: block; }
           </div>
         </div>
 
-        <div class="t-entry reveal">
-          <article class="t-card t-card--apple">
-            <header class="t-card-header">
-              <span class="mono t-card-employer">Apple</span>
-              <span class="t-card-sep" aria-hidden="true"></span>
-              <span class="mono t-card-period">2013 — 2022</span>
-            </header>
-            <h2 class="t-card-role">RF Systems Engineer</h2>
-            <p class="t-card-tagline">That ended up running on a few million devices, which still feels a little absurd to type out.</p>
-            <p class="t-card-body">RF desense analysis, wireless validation, factory test automation, dry runs, lab debug, and systems integration — across product lines shipped at Apple scale.</p>
-            <div class="shipped">Shipped on: iPhone 13 · iPhone 14 · iPhone 15 · AirPods Pro</div>
-            <div class="t-tags" aria-label="Skills">
-              <span class="t-tag t-tag--apple">RF Desense</span>
-              <span class="t-tag t-tag--apple">Wi-Fi</span>
-              <span class="t-tag t-tag--apple">Factory Test</span>
-              <span class="t-tag t-tag--apple">C++</span>
-              <span class="t-tag t-tag--apple">Swift</span>
+        <div class="t-entry reveal" data-era="apple">
+          <article class="card card--apple" data-era="apple">
+
+            <button class="card__toggle"
+                    aria-expanded="false"
+                    aria-controls="apple-panel"
+                    aria-label="Apple, RF Systems Engineer — tap to expand">
+              <div class="card__meta">
+                <span class="card__employer mono">Apple</span>
+                <span class="card__sep" aria-hidden="true"></span>
+                <span class="card__period mono">2013 — 2022</span>
+              </div>
+              <h2 class="card__role" id="apple-role">RF Systems Engineer</h2>
+              <p class="card__headline">This work shipped in hundreds of millions of iPhones and AirPods.</p>
+              <div class="card__chips-preview" aria-hidden="true">
+                <span class="chip chip--apple">RF Desense</span>
+                <span class="chip chip--apple">Wi-Fi</span>
+                <span class="chip chip--apple">Factory Test</span>
+                <span class="chip chip--apple">C++</span>
+              </div>
+              <span class="card__chevron" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                     aria-hidden="true">
+                  <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="card__detail" id="apple-panel" role="region" aria-labelledby="apple-role">
+              <div>
+                <div class="card__detail-inner">
+                  <p class="card__body">RF desense analysis, wireless validation, factory test automation, dry runs, lab debug, and systems integration — across product lines shipped at Apple scale. The job was always the same: make the radio behave before the line started moving.</p>
+                  <p class="card__shipped">Shipped on: iPhone 13 · iPhone 14 · iPhone 15 · AirPods Pro</p>
+                  <div class="card__full-tags" aria-label="Skills">
+                    <span class="chip chip--apple">RF Desense</span>
+                    <span class="chip chip--apple">Wi-Fi</span>
+                    <span class="chip chip--apple">Wireless Validation</span>
+                    <span class="chip chip--apple">Factory Test</span>
+                    <span class="chip chip--apple">C++</span>
+                    <span class="chip chip--apple">Swift</span>
+                    <span class="chip chip--apple">Systems Integration</span>
+                  </div>
+                </div>
+              </div>
             </div>
+
           </article>
         </div>
 
 
         <!-- ======================================================
              DEGREE BAND — slim dashed pill connector
-             Floats between Apple and Microsoft
+             Floats between Apple and Microsoft eras
              ====================================================== -->
 
         <div class="t-spine t-spine--empty" aria-hidden="true"></div>
 
-        <div class="t-degree-entry reveal">
+        <div class="t-degree-entry reveal" aria-label="Education">
           <div class="degree-pill">
             <span class="degree-title">B.S. Engineering</span>
             <span class="degree-abet" aria-label="ABET accredited">ABET</span>
@@ -1035,14 +1448,25 @@ img, svg { display: block; }
 
 
         <!-- ======================================================
-             MICROSOFT  ·  2022 – PRESENT  ·  CURRENT ROLE
-             Full card, accent surface, filled dot, 4px left edge
-             The most visually prominent entry
+             CHAPTER BREAK: Apple → Microsoft
+             Era color shifts to Microsoft steel blue
              ====================================================== -->
 
-        <div class="t-spine" aria-hidden="true">
+        <div class="chapter reveal" data-chapter data-era="msft" aria-label="Transition: Apple to Microsoft">
+          <span class="chapter__year">2022</span>
+          <span class="chapter__label">Apple → Microsoft</span>
+          <span class="chapter__rule" aria-hidden="true"></span>
+        </div>
+
+
+        <!-- ======================================================
+             MICROSOFT — 2022–Present
+             Current role: amber edge, tinted surface, filled dot
+             ====================================================== -->
+
+        <div class="t-spine reveal" aria-hidden="true">
           <div class="t-dot t-dot--current">
-            <!-- Windows four-pane icon — 2×2 grid of small squares -->
+            <!-- Windows four-pane icon -->
             <svg width="8" height="8" viewBox="0 0 8 8"
                  aria-hidden="true" focusable="false">
               <rect x="0"   y="0"   width="3.3" height="3.3" fill="currentColor"/>
@@ -1053,24 +1477,53 @@ img, svg { display: block; }
           </div>
         </div>
 
-        <div class="t-entry t-entry--current reveal">
-          <article class="t-card t-card--msft t-card--current">
-            <header class="t-card-header">
-              <span class="mono t-card-employer t-card-employer--current">Microsoft</span>
-              <span class="t-card-sep" aria-hidden="true"></span>
-              <span class="mono t-card-period t-card-period--current">2022 — Present</span>
-            </header>
-            <h2 class="t-card-role">Driver Quality / Platform Tooling</h2>
-            <p class="t-card-tagline">These days I build the tooling that keeps all of it running — so the next person isn't debugging it at 2am.</p>
-            <p class="t-card-body">Windows driver quality tools, WDK, HLK, Driver Verifier, certification workflows, and partner validation. The platform layer that every Windows driver must clear before it ships.</p>
-            <div class="shipped">Ships in: Driver Verifier · Windows HLK · WDK</div>
-            <div class="t-tags" aria-label="Skills">
-              <span class="t-tag t-tag--msft">WDK</span>
-              <span class="t-tag t-tag--msft">HLK</span>
-              <span class="t-tag t-tag--msft">Driver Verifier</span>
-              <span class="t-tag t-tag--msft">C++</span>
-              <span class="t-tag t-tag--msft">Validation</span>
+        <div class="t-entry t-entry--current reveal" data-era="msft">
+          <article class="card card--msft card--current" data-era="msft">
+
+            <button class="card__toggle"
+                    aria-expanded="false"
+                    aria-controls="msft-panel"
+                    aria-label="Microsoft, Driver Quality and Platform Tooling — tap to expand">
+              <div class="card__meta">
+                <span class="card__employer mono">Microsoft</span>
+                <span class="card__sep" aria-hidden="true"></span>
+                <span class="card__period mono">2022 — Present</span>
+              </div>
+              <h2 class="card__role" id="msft-role">Driver Quality / Platform Tooling</h2>
+              <p class="card__headline">Now I build the tooling every Windows driver has to clear before it ships.</p>
+              <div class="card__chips-preview" aria-hidden="true">
+                <span class="chip chip--msft">WDK</span>
+                <span class="chip chip--msft">HLK</span>
+                <span class="chip chip--msft">Driver Verifier</span>
+                <span class="chip chip--msft">C++</span>
+              </div>
+              <span class="card__chevron" aria-hidden="true">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                     aria-hidden="true">
+                  <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.6"
+                        stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </span>
+            </button>
+
+            <div class="card__detail" id="msft-panel" role="region" aria-labelledby="msft-role">
+              <div>
+                <div class="card__detail-inner">
+                  <p class="card__body">Windows driver quality tools, WDK, HLK, Driver Verifier, certification workflows, partner validation, and systems-level C/C++ work — so the failure gets caught here, in the lab, and not by someone debugging it at 2am.</p>
+                  <p class="card__shipped">Ships in: Driver Verifier · Windows HLK · WDK</p>
+                  <div class="card__full-tags" aria-label="Skills">
+                    <span class="chip chip--msft">WDK</span>
+                    <span class="chip chip--msft">HLK</span>
+                    <span class="chip chip--msft">Driver Verifier</span>
+                    <span class="chip chip--msft">C++</span>
+                    <span class="chip chip--msft">Validation</span>
+                    <span class="chip chip--msft">Certification</span>
+                    <span class="chip chip--msft">Partner Tools</span>
+                  </div>
+                </div>
+              </div>
             </div>
+
           </article>
         </div>
 
@@ -1083,15 +1536,20 @@ img, svg { display: block; }
   <!-- ============================================================
        CONTACT
        ============================================================ -->
-  <section class="contact-section" id="contact">
+  <section class="contact-section" id="contact" aria-labelledby="contact-headline">
     <div class="container">
-      <h2 class="contact-headline">Got a gnarly systems problem?<br>Happy to talk.</h2>
-      <p class="contact-meta">Pacific Northwest · Open to systems engineering roles</p>
-      <div class="contact-ctas">
+
+      <h2 class="contact-headline reveal" id="contact-headline">
+        Have a hard systems problem?<br>That's the part I like. Let's talk.
+      </h2>
+
+      <p class="contact-meta reveal">Pacific Northwest · Open to systems engineering roles</p>
+
+      <div class="contact-ctas reveal">
         <a href="resume/Matt_Moseley_Resume.pdf"
            class="btn btn--primary"
            target="_blank"
-           rel="noopener noreferrer">Resume PDF</a>
+           rel="noopener noreferrer">Résumé PDF</a>
         <a href="https://linkedin.com/in/YOUR_PROFILE"
            class="btn btn--outline"
            target="_blank"
@@ -1099,53 +1557,253 @@ img, svg { display: block; }
         <a href="mailto:daniel.m.moseley@gmail.com"
            class="btn btn--outline">Email</a>
       </div>
+
     </div>
   </section>
 
 
   <!-- ============================================================
-       MOBILE BOTTOM ACTION BAR
-       Resume (primary) + Path (secondary) — replaces hidden nav links
-       ============================================================ -->
-  <div class="mobile-bar" role="navigation" aria-label="Quick actions">
-    <a href="resume/Matt_Moseley_Resume.pdf"
-       class="btn btn--primary"
-       target="_blank"
-       rel="noopener noreferrer">Resume</a>
-    <a href="#timeline" class="btn btn--outline">Path</a>
-  </div>
-
-
-  <!-- ============================================================
-       SCROLL REVEAL
-       IntersectionObserver · threshold 0.16 · 700ms ease
+       JAVASCRIPT
+       Organized into logical sections, one scroll handler (rAF)
        ============================================================ -->
   <script>
-    (function () {
-      'use strict';
+  (function () {
+    'use strict';
 
-      // Graceful degradation for very old browsers
-      if (typeof IntersectionObserver === 'undefined') {
-        document.querySelectorAll('.reveal').forEach(function (el) {
-          el.classList.add('revealed');
-        });
+    // ============================================================
+    // PREFERS-REDUCED-MOTION CHECK
+    // ============================================================
+
+    var prefersReduced = window.matchMedia
+      ? window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      : false;
+
+    // ============================================================
+    // ELEMENT REFERENCES
+    // ============================================================
+
+    var progressEl  = document.getElementById('progress');
+    var fillEl      = document.getElementById('timeline-fill');
+    var trackEl     = document.getElementById('timeline-track');
+
+    // ============================================================
+    // HERO ENTRANCE CHOREOGRAPHY
+    // Staggered reveal: eyebrow → headline → lede → CTAs
+    // Each 90ms apart, starting 80ms after DOM ready
+    // ============================================================
+
+    function runHeroEntrance() {
+      if (prefersReduced) {
+        // Reduced motion: show everything immediately
+        document.querySelectorAll('.hero-eyebrow, .hero-headline, .hero-lede, .hero-ctas')
+          .forEach(function (el) { el.classList.add('hero--visible'); });
         return;
       }
 
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.16 });
+      var heroEls = [
+        document.querySelector('.hero-eyebrow'),
+        document.querySelector('.hero-headline'),
+        document.querySelector('.hero-lede'),
+        document.querySelector('.hero-ctas')
+      ];
 
-      document.querySelectorAll('.reveal').forEach(function (el) {
-        observer.observe(el);
+      heroEls.forEach(function (el, i) {
+        if (!el) return;
+        setTimeout(function () {
+          el.classList.add('hero--visible');
+        }, 80 + i * 90);
+      });
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', runHeroEntrance);
+    } else {
+      runHeroEntrance();
+    }
+
+    // ============================================================
+    // INTERSECTIONOBSERVER SETUP
+    // Falls back gracefully if IO not available (old browsers)
+    // ============================================================
+
+    if (typeof IntersectionObserver === 'undefined') {
+      // Fallback: show everything
+      document.querySelectorAll('.reveal')
+        .forEach(function (el) { el.classList.add('revealed'); });
+      document.querySelectorAll('.t-dot')
+        .forEach(function (dot) { dot.classList.add('dot--active'); });
+      return;
+    }
+
+    // ============================================================
+    // REVEAL OBSERVER
+    // Watches all .reveal elements — fires once, then unobserves
+    // threshold: 0.15, rootMargin clips bottom 12% of viewport
+    // ============================================================
+
+    var revealObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -12% 0px'
+    });
+
+    document.querySelectorAll('.reveal').forEach(function (el) {
+      revealObserver.observe(el);
+    });
+
+    // ============================================================
+    // DOT ACTIVATION OBSERVER
+    // Dots scale up + glow ring when they cross viewport center
+    // Fires once per dot, then unobserves
+    // ============================================================
+
+    var dotObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('dot--active');
+          dotObserver.unobserve(entry.target);
+        }
+      });
+    }, {
+      rootMargin: '0px 0px -20% 0px',
+      threshold: 0
+    });
+
+    document.querySelectorAll('.t-dot').forEach(function (dot) {
+      dotObserver.observe(dot);
+    });
+
+    // ============================================================
+    // ERA COLOR OBSERVER
+    // Watches chapter break dividers [data-chapter]
+    // When each enters the middle band of the viewport,
+    // mutates --line-color → progress bar + fill line shift hue.
+    // As you scroll Navy → Apple → Microsoft the page temperature shifts.
+    // ============================================================
+
+    var eraColors = {
+      navy:  '#1b3a6b',   // deep navy blue
+      apple: '#7B8794',   // graphite
+      msft:  '#3A6EA5'    // steel blue
+    };
+
+    var eraObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting && entry.target.dataset.era) {
+          var era = entry.target.dataset.era;
+          if (eraColors[era]) {
+            document.documentElement.style.setProperty('--line-color', eraColors[era]);
+          }
+        }
+      });
+    }, {
+      // Fire when element is in the center band of the viewport
+      rootMargin: '-38% 0px -38% 0px',
+      threshold: 0
+    });
+
+    document.querySelectorAll('[data-chapter]').forEach(function (el) {
+      eraObserver.observe(el);
+    });
+
+    // ============================================================
+    // CARD EXPAND / COLLAPSE
+    // Accordion: opening one closes all others
+    // Uses grid-template-rows: 0fr → 1fr animation (CSS handles it)
+    // Scrolls expanded card into view after animation begins
+    // ============================================================
+
+    var cards = document.querySelectorAll('.card');
+
+    function closeCard(card) {
+      card.removeAttribute('data-open');
+      var toggle = card.querySelector('.card__toggle');
+      if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function openCard(card) {
+      // Close any currently open card
+      cards.forEach(function (c) {
+        if (c !== card && c.hasAttribute('data-open')) {
+          closeCard(c);
+        }
       });
 
-    }());
+      card.setAttribute('data-open', '');
+      var toggle = card.querySelector('.card__toggle');
+      if (toggle) toggle.setAttribute('aria-expanded', 'true');
+
+      // Scroll into view after animation starts
+      // block: 'nearest' moves as little as possible
+      setTimeout(function () {
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 120);
+    }
+
+    cards.forEach(function (card) {
+      var toggle = card.querySelector('.card__toggle');
+      if (!toggle) return;
+
+      toggle.addEventListener('click', function () {
+        if (card.hasAttribute('data-open')) {
+          closeCard(card);
+        } else {
+          openCard(card);
+        }
+      });
+    });
+
+    // ============================================================
+    // SCROLL HANDLER — rAF throttled
+    // Single scroll listener drives two visual outputs per frame:
+    //   1. .progress scaleX  → page-level reading indicator
+    //   2. .timeline__fill scaleY → career fills as you scroll
+    // ============================================================
+
+    var ticking = false;
+
+    function updateScroll() {
+      ticking = false;
+
+      var scrollY = window.scrollY || window.pageYOffset;
+      var docH    = document.documentElement.scrollHeight - window.innerHeight;
+
+      // --- Top progress bar ---
+      if (progressEl && docH > 0) {
+        var pageProgress = Math.min(scrollY / docH, 1);
+        progressEl.style.transform = 'scaleX(' + pageProgress + ')';
+      }
+
+      // --- Timeline fill ---
+      if (fillEl && trackEl) {
+        var trackTop = trackEl.getBoundingClientRect().top + scrollY;
+        var trackH   = trackEl.offsetHeight;
+        // Start filling when viewport center hits top of track
+        // Finish when viewport center passes bottom of track
+        var centerY     = scrollY + window.innerHeight * 0.55;
+        var scrolled    = centerY - trackTop;
+        var fillProgress = Math.max(0, Math.min(scrolled / trackH, 1));
+        fillEl.style.transform = 'scaleY(' + fillProgress + ')';
+      }
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        requestAnimationFrame(updateScroll);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    // Run once on load to set initial state
+    updateScroll();
+
+  }());
   </script>
 
 </body>
