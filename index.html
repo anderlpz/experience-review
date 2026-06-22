@@ -275,6 +275,47 @@ code{
 .footer p{color:var(--muted);font-size:12px;margin-top:8px}
 .footer a{color:var(--accent-text)}
 
+/* -- Research direction blocks -- */
+.direction{margin:28px 0 0}
+.direction h3{
+  font-family:var(--serif);font-size:18px;font-weight:700;
+  margin-bottom:4px;color:var(--text);
+}
+.direction > p{font-size:14px;color:var(--muted);margin-bottom:10px;max-width:62ch;line-height:1.6}
+.direction > p strong{color:var(--text)}
+.ref{
+  margin:10px 0;padding:10px 14px;
+  border-left:2px solid var(--accent);
+  background:var(--accent-dim);
+  border-radius:0 var(--radius-sm) var(--radius-sm) 0;
+  font-size:13px;color:var(--muted);line-height:1.55;
+}
+.ref strong{color:var(--accent-text)}
+.ref a{color:var(--accent-text)}
+.copy-block{
+  margin:12px 0;padding:14px 18px;
+  background:var(--surface);border:1px solid var(--border-subtle);
+  border-radius:var(--radius-sm);
+  font-size:14px;line-height:1.65;color:var(--muted);
+}
+.copy-block .copy-label{
+  font-family:var(--mono);font-size:11px;font-weight:500;
+  letter-spacing:0.04em;text-transform:uppercase;
+  color:var(--accent-text);margin-bottom:6px;
+}
+.copy-block .copy-line{margin:3px 0}
+.copy-block .copy-line em{font-style:normal;color:var(--muted);font-size:12px}
+.copy-block .copy-line strong{color:var(--text);font-weight:500}
+.palette-row{
+  display:flex;flex-wrap:wrap;gap:8px;margin:10px 0;
+}
+.swatch{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 10px;border-radius:var(--radius-sm);
+  background:var(--surface);border:1px solid var(--border-subtle);
+  font-family:var(--mono);font-size:12px;color:var(--muted);
+}
+.swatch-dot{width:14px;height:14px;border-radius:4px;flex-shrink:0}
 /* -- Responsive -- */
 @media(max-width:600px){
   .page{padding:0 20px}
@@ -458,10 +499,152 @@ code{
   </div>
 </section>
 
+<!-- ====== DESIGN DIRECTIONS ====== -->
+<section>
+  <h2>Design directions</h2>
+  <p>Five specialist agents researched this independently and returned concrete recommendations with real-world references. What follows is the synthesized brief.</p>
+
+  <!-- 1. AESTHETIC -->
+  <div class="direction">
+    <h3>1. Aesthetic direction</h3>
+    <p>The root cause of the AI look is <strong>undifferentiated abundance</strong> -- five colors, glows everywhere, identical cards, a billboard hero. The fix is subtraction and hierarchy.</p>
+
+    <p><strong>Palette.</strong> Go near-monochrome. Don't color-code per employer -- that's what causes the rainbow. Single warm accent for "current role" + links only. If employer differentiation is needed, use desaturated tints at matched lightness applied to a 2px left edge marker.</p>
+    <div class="palette-row">
+      <span class="swatch"><span class="swatch-dot" style="background:#0D0F12"></span>#0D0F12 bg</span>
+      <span class="swatch"><span class="swatch-dot" style="background:#16191F"></span>#16191F surface</span>
+      <span class="swatch"><span class="swatch-dot" style="background:#E0A458"></span>#E0A458 accent</span>
+      <span class="swatch"><span class="swatch-dot" style="background:#E8EAED"></span>#E8EAED text</span>
+      <span class="swatch"><span class="swatch-dot" style="background:#9BA1AC"></span>#9BA1AC muted</span>
+    </div>
+    <div class="ref">
+      <strong>Linear (linear.app)</strong> -- near-monochrome dark UI with a single accent that appears rarely. It works because restraint reads as confidence. When color is scarce, the one accent becomes meaningful -- it points at "this is now."
+    </div>
+
+    <p><strong>Typography.</strong> Pair a grotesque sans with monospace for dates, tech stack, and metadata. Mono on metadata reads as terminal-precise -- the single highest-leverage "engineer cares" signal.</p>
+    <div class="ref">
+      <strong>Vercel / Geist (vercel.com)</strong> -- the Geist Sans + Geist Mono family was designed by engineers for engineering interfaces. Also <strong>Klim Type Foundry (klim.co.nz)</strong> for editorial sans+mono pairing at the highest craft tier.
+    </div>
+
+    <p><strong>Timeline.</strong> Kill every <code>box-shadow</code> glow. 1px hairline rule for the line. 8--10px dots: hollow ring for past roles, solid accent fill for current role only. Short 16px horizontal tick connectors.</p>
+    <div class="ref">
+      <strong>Stripe Press / Stripe changelog (stripe.com)</strong> -- flat hairline rules with tiny precise markers. Also <strong>Rauno Freiberg (rauno.me)</strong> for how minimal markers + precise spacing feel intentional rather than templated.
+    </div>
+
+    <p><strong>Hero.</strong> Kill the billboard. Replace with a compact, left-aligned masthead: name, title, progression. Timeline starts immediately, above the fold. ~25--30vh, not 92vh. Skipping the billboard is the confidence move.</p>
+    <div class="ref">
+      <strong>Paco Coursey (paco.me)</strong> and <strong>Rauno (rauno.me)</strong> -- tiny header, content immediately. Someone sure of their work doesn't need a hero to announce it.
+    </div>
+  </div>
+
+  <!-- 2. PARALLEL EVENTS -->
+  <div class="direction">
+    <h3>2. Parallel events layout</h3>
+    <p><strong>Recommended: marginalia / sidenote spine.</strong> Work history is the main spine. Education lives in a left margin gutter, smaller and dimmer, vertically aligned to the work era it overlaps. The spine is a CSS grid column (not absolute positioned), so it can never drift.</p>
+
+    <div class="copy-block">
+      <div class="copy-label">css grid structure</div>
+      <div class="copy-line"><code>grid-template-columns: [aside] minmax(0,12rem) [spine] 1.25rem [card] minmax(0,1fr)</code></div>
+    </div>
+
+    <p>On mobile, the aside collapses as an indented annotation below its parent card with a dashed left border. No connector math survives to break.</p>
+    <div class="ref">
+      <strong>Tufte CSS sidenotes (edwardtufte.github.io/tufte-css)</strong> -- margin annotations on desktop, inline on mobile, same mental model. Also NYT / The Pudding scrollytelling marginalia.
+    </div>
+
+    <p><strong>Alternative: nested "meanwhile" inset.</strong> Education becomes a child of the work card it overlaps with. A child literally cannot mis-position relative to its parent. Bulletproof, zero connector logic.</p>
+    <div class="ref">
+      <strong>LinkedIn</strong> experience entries with nested sub-roles/promotions. <strong>read.cv</strong> stacked entries. The education reads as a sub-note within the era.
+    </div>
+
+    <p><strong>Key fix for both:</strong> replace <code>left:150px</code> absolute spine with a named grid column. The rail lives inside the layout flow and re-aligns at any width.</p>
+  </div>
+
+  <!-- 3. CARDS & ICONS -->
+  <div class="direction">
+    <h3>3. Card and icon redesign</h3>
+    <p><strong>Core insight:</strong> kill the 112px icon column. Move the icon onto the timeline spine as a 44px squircle node. This single move fixes the identical-card problem, the oversized-icon problem, and the mobile reflow problem simultaneously.</p>
+
+    <p><strong>Card hierarchy by recency.</strong> Same skeleton, one promoted card:</p>
+    <div class="copy-block">
+      <div class="copy-label">hierarchy</div>
+      <div class="copy-line"><strong>Current role (Microsoft):</strong> <em>filled node + tinted card surface, expanded content</em></div>
+      <div class="copy-line"><strong>Prior roles (Apple, Navy):</strong> <em>outline nodes, standard surface, compressed content</em></div>
+      <div class="copy-line"><strong>Education / schools:</strong> <em>no card chrome, bare text with small gray node</em></div>
+    </div>
+    <div class="ref">
+      <strong>Brian Lovin (brianlovin.com)</strong>, <strong>Paco Coursey (paco.me)</strong>, <strong>Read.cv</strong> -- they vary density per entry. Featured work gets rich treatment; everything else collapses to dense rows. Varied weight reads as a person making hierarchy decisions. Also <strong>Tailwind UI Spotlight resume component</strong> -- the closest structural match.
+    </div>
+
+    <p><strong>Icons:</strong> replace Unicode with inline SVG role-meaning marks. Anchor for Navy, signal waves for Apple RF, four-pane window for Microsoft. These communicate the <em>work</em> (more useful than a corporate logo) and stay a visual family because they share stroke-width and viewBox.</p>
+
+    <p><strong>Skill tags:</strong> replace the generic pill-with-border with tinted flat chips in monospace. No border, org-accent tint, tiny leading dot. Monospace tags (RF, SATCOM, WDK) read as technical tokens -- fitting for an engineer.</p>
+    <div class="ref">
+      <strong>Vercel / Geist design system</strong> -- squircle badges, flat tinted tokens instead of bordered pills, desaturated single-accent discipline. <strong>GitHub profile activity timeline</strong> -- node-on-spine with small icons, clear primary/secondary distinction.
+    </div>
+  </div>
+
+  <!-- 4. MOBILE -->
+  <div class="direction">
+    <h3>4. Mobile strategy</h3>
+    <p><strong>Hero:</strong> drop to <code>min-height: 60svh</code> on mobile. Use <code>svh</code> (small viewport height) so the hero is sized to the collapsed browser chrome state. Let the first timeline card peek above the fold to signal "scroll = substance."</p>
+    <div class="ref">
+      <strong>Brittany Chiang (brittanychiang.com)</strong> -- name, role, and positioning statement immediately visible on mobile. No full-screen splash to scroll past.
+    </div>
+
+    <p><strong>Navigation:</strong> don't hide it -- relocate. A persistent bottom action bar with Resume PDF (primary, filled) and Path (secondary). The Resume link is literally what a recruiter came for. Pad with <code>env(safe-area-inset-bottom)</code> to clear the iPhone home indicator.</p>
+    <div class="ref">
+      <strong>Stripe (stripe.com)</strong> on mobile -- keeps primary CTA always reachable rather than hiding in a menu. <strong>read.cv</strong> career profiles -- high-value actions in a slim persistent bar.
+    </div>
+
+    <p><strong>Touch targets:</strong> every interactive element gets minimum 48x48px hit area with 8px+ spacing between adjacent targets.</p>
+    <div class="ref">
+      <strong>GOV.UK Design System (gov.uk)</strong> -- the reference implementation for accessible mobile touch targets, validated across an enormous low-end-device user base.
+    </div>
+
+    <p><strong>Open Graph tags:</strong> generate a 1200x630 OG image card with name and role baked in as text. The link preview is what the recruiter sees <em>before</em> they click -- it's the actual first impression.</p>
+    <div class="ref">
+      <strong>Lee Robinson (leerob.io)</strong> -- dynamic OG images so every shared link previews as a branded card with title text rendered into the image.
+    </div>
+  </div>
+
+  <!-- 5. VOICE & COPY -->
+  <div class="direction">
+    <h3>5. Voice and copy</h3>
+    <p><strong>The core insight:</strong> Matt's three jobs aren't three different careers -- they're the same job at increasing scale. He has always worked at the <strong>seam between hardware and software</strong>. Navy = signals, can't fail. Apple = the physical-to-digital boundary, shipped to millions. Microsoft drivers = literally the software layer that talks to hardware. That throughline is the asset the current copy leaves on the table.</p>
+
+    <div class="copy-block">
+      <div class="copy-label">recommended hero copy</div>
+      <div class="copy-line"><em>eyebrow</em> <strong>Systems engineer -- hardware to platform</strong></div>
+      <div class="copy-line"><em>headline</em> <strong>I keep the seam between hardware and software reliable.</strong></div>
+      <div class="copy-line"><em>lede</em> <strong>Three employers, one constant -- the layer where physical hardware becomes dependable software. Navy electronics taught me signals, Apple taught me scale, Microsoft taught me the platform underneath.</strong></div>
+    </div>
+
+    <div class="copy-block">
+      <div class="copy-label">card headlines as a triptych</div>
+      <div class="copy-line"><em>navy</em> <strong>Learned to fix what couldn't fail.</strong></div>
+      <div class="copy-line"><em>apple</em> <strong>Scaled that to millions of devices.</strong></div>
+      <div class="copy-line"><em>microsoft</em> <strong>Now I build the tooling that keeps it reliable.</strong></div>
+    </div>
+    <p>Read in sequence, they tell a three-act story. "That" and "Now" stitch the cards together so they read as one narrative, present-tense landing on current work.</p>
+
+    <div class="copy-block">
+      <div class="copy-label">contact cta</div>
+      <div class="copy-line"><strong>Have a hard systems problem? I'd like to hear it.</strong></div>
+    </div>
+
+    <div class="ref">
+      <strong>Stripe</strong> ("Payments infrastructure for the internet") -- value-prop headline states impact, not skills. <strong>Linear</strong> -- confidence through brevity, no hedging. <strong>Brian Lovin (brianlovin.com)</strong> -- clear first-person positioning. <strong>Josh Comeau (joshwcomeau.com)</strong> -- warm, specific personal voice without losing technical credibility.
+    </div>
+
+    <p>A skill list ("Hardware, RF, and software integration") is the weakest possible headline because every engineer has one. A headline should be the one thing only <em>this</em> person would write.</p>
+  </div>
+</section>
+
 <!-- ====== APPROACH ====== -->
 <section>
-  <h2>How we'd approach the work</h2>
-  <p>This is a textbook case for the design intelligence agent team. Each agent handles a specific domain, then results synthesize into a cohesive implementation.</p>
+  <h2>How we approached the work</h2>
+  <p>Five design intelligence agents researched this in parallel. Each handles a specific domain, and the results synthesized into the brief above.</p>
 
   <div class="agent-grid">
     <div class="agent-row">
@@ -487,8 +670,8 @@ code{
   </div>
 
   <div class="callout">
-    <p><strong>This page was produced in the same session that analyzed the site</strong> -- reading Matt's iMessage, cloning the repo, auditing the code, running design intelligence agents, writing this review, and deploying it to a URL. One conversation.</p>
-    <p>The page itself practices what the review recommends. One accent color. Warm palette. Serif display type for editorial authority. No glows. Varied visual weight. Responsive.</p>
+    <p><strong>Everything above was produced in a single session</strong> -- reading Matt's iMessage, cloning the repo, auditing the code, dispatching five design intelligence agents in parallel for research, synthesizing their findings, and deploying this page to a URL. One conversation.</p>
+    <p>The page itself practices what the review recommends. One accent color. Warm palette. Serif display type. No glows. Varied visual weight. Responsive.</p>
   </div>
 </section>
 
