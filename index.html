@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience Site Review -- Design Analysis for Matt</title>
+<meta property="og:title" content="Experience Site -- Design Analysis">
+<meta property="og:description" content="A design audit of Matt Moseley's career timeline site, with recommendations for making it land with recruiters.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+:root{
+  --bg:#0c0e13;
+  --surface:#14161d;
+  --surface-2:#1a1d26;
+  --border:rgba(255,255,255,0.08);
+  --text:#e8e8ec;
+  --muted:#8b8b9e;
+  --accent:#5b8def;
+  --accent-dim:rgba(91,141,239,0.12);
+  --accent-border:rgba(91,141,239,0.25);
+  --warn:#d4915e;
+  --warn-dim:rgba(212,145,94,0.10);
+  --warn-border:rgba(212,145,94,0.22);
+  --good:#6bbd7b;
+  --good-dim:rgba(107,189,123,0.10);
+  --good-border:rgba(107,189,123,0.22);
+  --radius:12px;
+  --radius-sm:8px;
+  --max-w:820px;
+}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,sans-serif;
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.page{max-width:var(--max-w);margin:0 auto;padding:0 24px}
+.header{padding:80px 0 60px;border-bottom:1px solid var(--border)}
+.header .kicker{
+  font-family:'JetBrains Mono',monospace;
+  font-size:13px;font-weight:500;color:var(--accent);
+  letter-spacing:0.06em;text-transform:uppercase;margin-bottom:20px;
+}
+.header h1{
+  font-size:clamp(32px,5vw,44px);font-weight:700;
+  line-height:1.15;letter-spacing:-0.025em;max-width:680px;
+}
+.header .subtitle{color:var(--muted);font-size:18px;line-height:1.5;margin-top:16px;max-width:600px}
+.byline{
+  margin-top:28px;display:flex;align-items:center;gap:12px;
+  color:var(--muted);font-size:14px;
+}
+.byline-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);flex-shrink:0}
+section{padding:48px 0}
+section+section{border-top:1px solid var(--border)}
+section h2{font-size:22px;font-weight:700;letter-spacing:-0.015em;margin-bottom:8px}
+section h3{font-size:17px;font-weight:600;margin:28px 0 10px;color:var(--text)}
+section p{color:var(--muted);max-width:65ch;margin-bottom:14px}
+section p strong{color:var(--text)}
+.card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px 24px;margin:16px 0;
+}
+.card.accent{border-left:3px solid var(--accent);background:var(--accent-dim)}
+.card.warn{border-left:3px solid var(--warn);background:var(--warn-dim)}
+.card.good{border-left:3px solid var(--good);background:var(--good-dim)}
+.card-title{font-weight:600;font-size:15px;margin-bottom:6px;color:var(--text)}
+.card p{font-size:15px;margin-bottom:8px}
+.card p:last-child{margin-bottom:0}
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+th{
+  text-align:left;font-weight:600;font-size:12px;
+  letter-spacing:0.05em;text-transform:uppercase;
+  color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--border);
+}
+td{padding:12px 14px;border-bottom:1px solid var(--border);color:var(--muted);vertical-align:top}
+td strong{color:var(--text);font-weight:600}
+tr:last-child td{border-bottom:none}
+code{
+  font-family:'JetBrains Mono',monospace;font-size:13px;
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:4px;padding:2px 6px;color:var(--accent);
+}
+.fingerprints{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:14px;margin:16px 0;
+}
+.fingerprint{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:16px 18px;
+}
+.fingerprint .tag{
+  display:inline-block;font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:500;letter-spacing:0.04em;text-transform:uppercase;
+  color:var(--warn);background:var(--warn-dim);border:1px solid var(--warn-border);
+  border-radius:4px;padding:3px 8px;margin-bottom:10px;
+}
+.fingerprint p{font-size:14px;color:var(--muted);margin:0}
+.fingerprint p strong{color:var(--text)}
+.issue{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:14px 0}
+.issue+.issue{border-top:1px solid var(--border)}
+.issue-num{
+  font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;
+  color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-border);
+  border-radius:4px;padding:2px 8px;white-space:nowrap;
+}
+.issue-body{min-width:0}
+.issue-title{font-weight:600;font-size:15px;margin-bottom:4px}
+.issue-desc{font-size:14px;color:var(--muted)}
+.tier{margin:20px 0;padding:20px 24px;border-radius:var(--radius)}
+.tier-1{background:var(--surface);border:1px solid var(--border)}
+.tier-2{background:var(--accent-dim);border:1px solid var(--accent-border)}
+.tier-label{
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;
+  letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px;
+}
+.tier-1 .tier-label{color:var(--muted)}
+.tier-2 .tier-label{color:var(--accent)}
+.agent-grid{display:grid;gap:12px;margin:16px 0}
+.agent-row{
+  display:grid;grid-template-columns:180px 1fr;gap:16px;
+  padding:14px 18px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius-sm);align-items:start;
+}
+.agent-name{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500;color:var(--accent)}
+.agent-task{font-size:14px;color:var(--muted)}
+.footer{padding:40px 0 80px;border-top:1px solid var(--border);color:var(--muted);font-size:13px}
+.footer a{color:var(--accent);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+.callout{
+  margin:32px 0;padding:24px 28px;
+  background:linear-gradient(135deg, var(--accent-dim), rgba(91,141,239,0.04));
+  border:1px solid var(--accent-border);border-radius:var(--radius);
+}
+.callout p{color:var(--muted);font-size:15px;margin-bottom:10px}
+.callout p:last-child{margin-bottom:0}
+.callout strong{color:var(--text)}
+@media(max-width:640px){
+  .header{padding:48px 0 40px}
+  section{padding:32px 0}
+  .fingerprints{grid-template-columns:1fr}
+  .agent-row{grid-template-columns:1fr;gap:4px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="header">
+  <p class="kicker">Design review</p>
+  <h1>experience/career-timeline analysis</h1>
+  <p class="subtitle">A design audit of Matt's career timeline site, with recommendations for making it land with recruiters.</p>
+  <div class="byline">
+    <span class="byline-dot"></span>
+    <span>Produced by <strong>Amplifier</strong> with Design Intelligence agents &mdash; June 21, 2026</span>
+  </div>
+</header>
+
+<section>
+  <h2>Context</h2>
+  <p>Matt built a career timeline site to supplement job applications. It's vibe-coded (AI-assisted), hosted on GitHub Pages, and lives on the <code>develop</code> branch of <a href="https://github.com/matthesoundman/experience/tree/develop" style="color:var(--accent)">matthesoundman/experience</a>. The career story is strong: <strong>Navy electronics &rarr; Apple RF systems &rarr; Microsoft driver quality</strong>. Each step builds on the last. The timeline format is the right choice for this narrative.</p>
+  <p>He asked for formatting help and filed 5 issues against himself. He said "don't spend much time on it." This review respects that constraint while identifying what actually matters for his goal.</p>
+</section>
+
+<section>
+  <h2>What's working</h2>
+
+  <div class="card good">
+    <div class="card-title">The career narrative</div>
+    <p>Three employers, clear skill escalation, and a throughline (electronics &rarr; RF &rarr; systems). This is a better story than most resumes tell. The timeline format lets a viewer absorb it in seconds.</p>
+  </div>
+
+  <div class="card good">
+    <div class="card-title">Dark theme with frosted nav</div>
+    <p>The fixed <code>backdrop-filter: blur(18px)</code> nav bar is clean. The overall dark tone is appropriate for a technical/engineering portfolio. The foundation is solid.</p>
+  </div>
+
+  <div class="card good">
+    <div class="card-title">The degree band concept</div>
+    <p>Showing the engineering degree as a connecting element between the Apple card and the timeline (with a dotted connector) communicates "I did this while working full time" visually. Clever structural choice.</p>
+  </div>
+
+  <div class="card good">
+    <div class="card-title">Scroll-reveal animations</div>
+    <p>The IntersectionObserver-based reveals are subtle and appropriate. They add polish without being distracting. Good performance characteristics (GPU-accelerated opacity + transform).</p>
+  </div>
+</section>
+
+<section>
+  <h2>Matt's filed issues</h2>
+  <p>These are the 5 issues Matt filed against himself. All valid, all fixable.</p>
+
+  <div class="issue">
+    <span class="issue-num">#1</span>
+    <div class="issue-body">
+      <div class="issue-title">Parallel events display incorrectly</div>
+      <div class="issue-desc">Education that happened concurrently with work doesn't render right. The Technical Schools card (2008&ndash;2013, during Navy service) appears sequentially after Microsoft instead of alongside Navy.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-num">#2</span>
+    <div class="issue-body">
+      <div class="issue-title">Card symbols aren't great</div>
+      <div class="issue-desc">Needs the Navy ET (Electronics Technician) rating symbol and a proper Microsoft icon (Windows logo or driver-related). Current icons: obscure Unicode, Apple logo (only renders on Apple devices), empty square, triangle.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-num">#3</span>
+    <div class="issue-body">
+      <div class="issue-title">Technical schools card is too big</div>
+      <div class="issue-desc">Should be subtle like the degree band, not a full-size card. Matt wants it "smaller and set in parallel." The <code>.compact</code> CSS class is applied in HTML but has no styles defined &mdash; it was intended but never implemented.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-num">#4</span>
+    <div class="issue-body">
+      <div class="issue-title">Website header needs review</div>
+      <div class="issue-desc">"The header needs review and refinement. It does not serve well at the moment." The hero takes 92vh before any timeline content appears.</div>
+    </div>
+  </div>
+
+  <div class="issue">
+    <span class="issue-num">#5</span>
+    <div class="issue-body">
+      <div class="issue-title">LinkedIn ID is missing</div>
+      <div class="issue-desc">The placeholder <code>YOUR_PROFILE</code> is still in the LinkedIn href. Quick fix once Matt drops in his actual LinkedIn slug.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>AI design fingerprints</h2>
+  <p>This is the critical finding. The site currently reads as AI-generated within seconds. For a job application supplement, this undermines the implicit message ("I care about quality"). Here's what flags it:</p>
+
+  <div class="fingerprints">
+    <div class="fingerprint">
+      <span class="tag">Detected</span>
+      <p><strong>Rainbow accent palette.</strong> Five competing colors (blue, purple, green, cyan, yellow). Design principle: one accent color. Multiple accent colors is the most common AI palette signature.</p>
+    </div>
+    <div class="fingerprint">
+      <span class="tag">Detected</span>
+      <p><strong>Neon outer glows.</strong> <code>box-shadow: 0 0 38px</code> on timeline dots. Classic AI glow effect. Subtle inner borders or tinted shadows read as human-designed.</p>
+    </div>
+    <div class="fingerprint">
+      <span class="tag">Detected</span>
+      <p><strong>Identical card structure.</strong> Every card has the exact same proportions, same layout, same icon treatment. Human designers vary cards by type and importance.</p>
+    </div>
+    <div class="fingerprint">
+      <span class="tag">Detected</span>
+      <p><strong>CSS grid overlay.</strong> The <code>body::before</code> 36px grid pattern is a common AI dark-theme cliche. Adds visual noise without serving the content.</p>
+    </div>
+    <div class="fingerprint">
+      <span class="tag">Detected</span>
+      <p><strong>Oversized centered hero.</strong> 92vh hero with huge H1 and tight letter-spacing. Textbook AI landing page. The hero should earn its space or get out of the way.</p>
+    </div>
+    <div class="fingerprint">
+      <span class="tag">Detected</span>
+      <p><strong>Generic Unicode icons.</strong> Arbitrary Unicode characters as icons rather than purpose-made SVGs or a proper icon set. The Apple logo character only renders on Apple devices &mdash; Windows recruiters see a broken glyph.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Through the recruiter lens</h2>
+  <p>Matt's audience is hiring managers and recruiters. They'll typically arrive on <strong>mobile</strong> (LinkedIn &rarr; click link &rarr; phone browser), spend <strong>10&ndash;20 seconds</strong>, and want to immediately grasp the career trajectory.</p>
+
+  <div class="card warn">
+    <div class="card-title">92vh hero pushes content below the fold</div>
+    <p>The actual career timeline &mdash; the reason someone clicks the link &mdash; is invisible until they scroll past a near-full-screen hero. On mobile, this is especially costly. The hero should introduce, not gate.</p>
+  </div>
+
+  <div class="card warn">
+    <div class="card-title">Navigation disappears on mobile</div>
+    <p>Below 850px, both navigation links are hidden. Only the brand name survives. The "Path" and "Resume" links vanish exactly when they matter most &mdash; on the device recruiters are actually using.</p>
+  </div>
+
+  <div class="card warn">
+    <div class="card-title">No Open Graph meta tags</div>
+    <p>When this URL is shared on LinkedIn or pasted into an application, the link preview will be generic. No title, no description, no image. First impressions matter &mdash; the meta tags are what the recruiter sees <em>before</em> they click.</p>
+  </div>
+
+  <div class="card warn">
+    <div class="card-title">Cross-platform icon rendering</div>
+    <p>The Apple card uses a Unicode character that only renders on macOS/iOS. On a Windows recruiter's browser, it shows as a missing character glyph. SVGs solve this universally.</p>
+  </div>
+</section>
+
+<section>
+  <h2>Recommendations</h2>
+  <p>Organized by what Matt asked for versus what would make the biggest difference for his goal.</p>
+
+  <div class="tier tier-1">
+    <div class="tier-label">Tier 1 &mdash; What he asked for (his 5 issues)</div>
+    <p>Quick formatting fixes, icon swaps, parallel layout for concurrent events, LinkedIn URL, header rethink. These are all straightforward CSS/HTML changes. The parallel events problem (#1, #3) is the most structural &mdash; it needs a layout approach for showing overlapping timelines (e.g., a split-column or side-branch pattern for education alongside work).</p>
+  </div>
+
+  <div class="tier tier-2">
+    <div class="tier-label">Tier 2 &mdash; What makes it actually land</div>
+    <p><strong>Palette discipline:</strong> Pick one accent color (the blue is strong enough on its own), use brightness/saturation variants for the other employers instead of entirely different hues.</p>
+    <p><strong>De-AI the visual language:</strong> Remove grid overlay, replace neon glows with subtle borders, vary card proportions by importance, use proper SVG icons.</p>
+    <p><strong>Mobile-first hero:</strong> Shrink the hero to ~50vh or less, or restructure it so the timeline is partially visible on first load. The "Resume PDF" button should be immediately reachable.</p>
+    <p><strong>OG meta tags:</strong> 5 lines of HTML that transform how the link looks when shared. This is the lowest-effort, highest-impact change.</p>
+    <p><strong>Favicon:</strong> A missing favicon is a small thing that signals incompleteness.</p>
+  </div>
+</section>
+
+<section>
+  <h2>How we'd approach the work</h2>
+  <p>This is a textbook case for the Design Intelligence agent team. Each agent handles a specific domain, then results are synthesized into a cohesive implementation plan. Here's the team:</p>
+
+  <div class="agent-grid">
+    <div class="agent-row">
+      <span class="agent-name">art-director</span>
+      <span class="agent-task">Overall aesthetic strategy. Kill the AI fingerprints. Establish a cohesive palette and visual identity that says "engineer who cares about craft."</span>
+    </div>
+    <div class="agent-row">
+      <span class="agent-name">layout-architect</span>
+      <span class="agent-task">Solve the parallel events problem (issues #1, #3). Rethink timeline structure for the overlapping-career reality.</span>
+    </div>
+    <div class="agent-row">
+      <span class="agent-name">component-designer</span>
+      <span class="agent-task">Card redesign. Differentiate card types by importance. Fix icons with proper SVGs. Design the "subtle" variant Matt wants for schools and degree.</span>
+    </div>
+    <div class="agent-row">
+      <span class="agent-name">responsive-strategist</span>
+      <span class="agent-task">Mobile-first strategy. This will be viewed on phones from LinkedIn. Make the first 3 seconds count.</span>
+    </div>
+    <div class="agent-row">
+      <span class="agent-name">voice-strategist</span>
+      <span class="agent-task">Copy review. The headlines are decent but the hero copy could work harder for a recruiter's 10-second attention window.</span>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>The page you're reading right now was also produced by Amplifier</strong> &mdash; same toolchain, same session. One accent color, restrained palette, no glows, proper typography hierarchy, responsive layout. The analysis practices what it recommends.</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>Produced by <a href="https://github.com/microsoft/amplifier" target="_blank" rel="noopener">Amplifier</a> with the Design Intelligence agent team.</p>
+  <p style="margin-top:8px">Repo: <a href="https://github.com/matthesoundman/experience/tree/develop" target="_blank" rel="noopener">matthesoundman/experience @ develop</a></p>
+</footer>
+
+</div>
+</body>
+</html>
