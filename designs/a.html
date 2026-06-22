@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="Matt Moseley — Systems Engineer. RF, wireless validation, Windows driver tooling. Navy · Apple · Microsoft.">
+  <meta property="og:title" content="Matt Moseley · Systems Engineer">
+  <meta property="og:description" content="RF, wireless validation, Windows driver tooling. Navy · Apple · Microsoft. Pacific Northwest.">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Matt Moseley">
+  <title>Matt Moseley · Systems Engineer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       DESIGN TOKENS
+    ───────────────────────────────────────────────────────────── */
+    :root {
+      --bg:              #121110;
+      --surface:         #1C1A17;
+      --surface-raised:  #24211D;
+      --text-1:          #F5F1EA;
+      --text-2:          #B8B0A4;
+      --text-3:          #8A8276;
+      --text-4:          #5C564D;
+      --cu-500:          #C8743D;
+      --cu-300:          #E8A876;
+      --border:          #2A2722;
+
+      --sidebar-w:       340px;
+
+      --font-display:    'Space Grotesk', sans-serif;
+      --font-prose:      'Newsreader', serif;
+      --font-mono:       'IBM Plex Mono', monospace;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       RESET
+    ───────────────────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-2);
+      font-family: var(--font-prose);
+      font-size: 19px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       LAYOUT SHELL
+    ───────────────────────────────────────────────────────────── */
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       FIXED LEFT SIDEBAR
+    ───────────────────────────────────────────────────────────── */
+    .sidebar {
+      position: fixed;
+      inset: 0 auto 0 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      padding: 3.75rem 2.75rem 3rem;
+      z-index: 30;
+    }
+
+    /* keeps nav + name at the top, contact at the bottom */
+    .sidebar__identity {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar__name {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--text-1);
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar__role {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--cu-500);
+      margin-bottom: 3.5rem;
+    }
+
+    /* ─── Chapter Nav ─────────────────────────────────────────── */
+    .chapter-nav {
+      list-style: none;
+      margin-top: auto; /* pushes nav down slightly if name section is short */
+      margin-bottom: 0;
+    }
+
+    /* undo the auto: let it sit under the role label */
+    .sidebar__role + nav .chapter-nav {
+      margin-top: 0;
+    }
+
+    .chapter-nav__item + .chapter-nav__item {
+      margin-top: 0.2rem;
+    }
+
+    .chapter-nav__link {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: var(--font-mono);
+      font-size: 0.71rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-4);
+      text-decoration: none;
+      padding: 0.45rem 0;
+      min-height: 44px;
+      transition: color 0.2s ease;
+    }
+
+    .chapter-nav__link:hover {
+      color: var(--text-3);
+    }
+
+    .chapter-nav__link.is-active {
+      color: var(--cu-500);
+    }
+
+    .chapter-nav__dot {
+      flex-shrink: 0;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--cu-500);
+      opacity: 0;
+      transform: scale(0.4);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .chapter-nav__link.is-active .chapter-nav__dot {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* ─── Sidebar Contact Links ───────────────────────────────── */
+    .sidebar__contact {
+      border-top: 1px solid var(--border);
+      padding-top: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .sidebar__contact a {
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-3);
+      text-decoration: none;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s ease;
+    }
+
+    .sidebar__contact a:hover {
+      color: var(--cu-300);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       SIGNAL LINE (desktop)
+    ───────────────────────────────────────────────────────────── */
+    .signal-line {
+      position: fixed;
+      top: 0;
+      left: calc(var(--sidebar-w) - 1px);
+      width: 2px;
+      height: 100vh;
+      background: var(--border);
+      z-index: 40;
+      pointer-events: none;
+    }
+
+    .signal-line__fill {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        var(--cu-500) 0%,
+        var(--cu-300) 55%,
+        var(--cu-500) 100%
+      );
+      transform-origin: top center;
+      transform: scaleY(0);
+      will-change: transform;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       SCROLLING CONTENT COLUMN
+    ───────────────────────────────────────────────────────────── */
+    .content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       CHAPTER SECTIONS
+    ───────────────────────────────────────────────────────────── */
+    .chapter {
+      position: relative;
+      min-height: 80vh;
+      padding: 7rem 6vw 7rem 5rem;
+      background: var(--surface);
+    }
+
+    .chapter:nth-child(even) {
+      background: var(--bg);
+    }
+
+    .chapter__inner {
+      max-width: 680px;
+    }
+
+    /* Eyebrow — IBM Plex Mono, copper */
+    .eyebrow {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--cu-500);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Chapter heading — Space Grotesk, large, clamp */
+    .chapter__heading {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2rem, 3.4vw, 3.25rem);
+      color: var(--text-1);
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Prose body — Newsreader, the key differentiator */
+    .prose {
+      font-family: var(--font-prose);
+      font-size: 19px;
+      line-height: 1.65;
+      color: var(--text-2);
+      max-width: 64ch;
+    }
+
+    .prose p + p {
+      margin-top: 1.5rem;
+    }
+
+    /* Pull quote — Newsreader italic, copper left border */
+    .pull-quote {
+      font-family: var(--font-prose);
+      font-style: italic;
+      font-size: 1.5rem;
+      line-height: 1.45;
+      color: var(--text-1);
+      border-left: 3px solid var(--cu-500);
+      padding: 0.5rem 0 0.5rem 1.65rem;
+      margin: 3rem 0;
+      max-width: 50ch;
+    }
+
+    /* Skills container */
+    .skills {
+      margin-top: 2.75rem;
+    }
+
+    .skills__chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .skill-chip {
+      font-family: var(--font-mono);
+      font-size: 0.67rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--cu-300);
+      background: var(--surface-raised);
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      padding: 0.3rem 0.65rem;
+      white-space: nowrap;
+    }
+
+    /* Education note */
+    .edu-note {
+      margin-top: 1.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.69rem;
+      font-weight: 500;
+      color: var(--text-3);
+      letter-spacing: 0.04em;
+      line-height: 1.55;
+      padding-left: 1.1rem;
+      border-left: 1px solid var(--border);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       CONTACT SECTION
+    ───────────────────────────────────────────────────────────── */
+    .contact-section {
+      position: relative;
+      min-height: 72vh;
+      padding: 7rem 6vw 7rem 5rem;
+      background: var(--surface-raised);
+      display: flex;
+      align-items: center;
+    }
+
+    .contact-section__inner {
+      max-width: 580px;
+    }
+
+    .contact-section__heading {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: clamp(1.65rem, 2.8vw, 2.4rem);
+      color: var(--text-1);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 1rem;
+    }
+
+    .contact-section__sub {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--text-3);
+      margin-bottom: 2.75rem;
+    }
+
+    .contact-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.85rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 0.71rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      text-decoration: none;
+      padding: 0.8rem 1.6rem;
+      border-radius: 2px;
+      min-height: 48px;
+      white-space: nowrap;
+      transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .btn--primary {
+      background: var(--cu-500);
+      color: var(--bg);
+    }
+
+    .btn--primary:hover {
+      background: var(--cu-300);
+    }
+
+    .btn--ghost {
+      border: 1px solid var(--border);
+      color: var(--text-2);
+    }
+
+    .btn--ghost:hover {
+      border-color: var(--cu-500);
+      color: var(--cu-300);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       SCROLL ANIMATIONS  — gated on .js-animations (set by JS)
+       Falls back gracefully if JS fails: everything visible.
+    ───────────────────────────────────────────────────────────── */
+
+    /* Chapters fade + rise */
+    .js-animations .chapter {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .js-animations .chapter.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Pull quotes slide from left */
+    .js-animations .pull-quote {
+      opacity: 0;
+      transform: translateX(-16px);
+      transition: opacity 0.7s ease 0.15s, transform 0.7s ease 0.15s;
+    }
+    .js-animations .pull-quote.is-visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Skill chips stagger (delay set inline by JS) */
+    .js-animations .skill-chip {
+      opacity: 0;
+      transform: translateY(7px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .js-animations .skill-chip.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Contact section */
+    .js-animations .contact-section {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .js-animations .contact-section.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       MOBILE HEADER (hidden on desktop)
+    ───────────────────────────────────────────────────────────── */
+    .mobile-header {
+      display: none;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       MOBILE PROGRESS BAR (hidden on desktop)
+    ───────────────────────────────────────────────────────────── */
+    .progress-bar {
+      display: none;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       REDUCED MOTION OVERRIDES
+    ───────────────────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+
+      .js-animations .chapter,
+      .js-animations .pull-quote,
+      .js-animations .skill-chip,
+      .js-animations .contact-section {
+        opacity: 1;
+        transform: none;
+        transition: none;
+      }
+
+      .signal-line__fill,
+      .progress-bar__fill {
+        will-change: auto;
+      }
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       MOBILE — max 1023px
+    ───────────────────────────────────────────────────────────── */
+    @media (max-width: 1023px) {
+
+      body {
+        padding-top: 64px;
+      }
+
+      /* Horizontal progress bar at very top */
+      .progress-bar {
+        display: block;
+        position: fixed;
+        inset: 0 0 auto 0;
+        height: 3px;
+        z-index: 100;
+        background: var(--border);
+      }
+
+      .progress-bar__fill {
+        height: 100%;
+        background: linear-gradient(to right, var(--cu-500), var(--cu-300));
+        transform-origin: left center;
+        transform: scaleX(0);
+        will-change: transform;
+      }
+
+      /* Compact sticky header */
+      .mobile-header {
+        display: flex;
+        position: fixed;
+        inset: 0 0 auto 0;
+        height: 64px;
+        background: rgba(18, 17, 16, 0.94);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.25rem;
+        z-index: 50;
+        border-bottom: 1px solid var(--border);
+        margin-top: 3px; /* clear the progress bar */
+      }
+
+      .mobile-header__name {
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: 1rem;
+        color: var(--text-1);
+        letter-spacing: -0.015em;
+      }
+
+      .mobile-header__role {
+        font-family: var(--font-mono);
+        font-size: 0.63rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: var(--cu-500);
+      }
+
+      /* hide desktop elements */
+      .sidebar     { display: none; }
+      .signal-line { display: none; }
+
+      .content {
+        margin-left: 0;
+      }
+
+      .chapter {
+        padding: 4.5rem 1.5rem 4.5rem;
+        min-height: auto;
+      }
+
+      .contact-section {
+        padding: 4.5rem 1.5rem 5rem;
+        min-height: auto;
+      }
+
+      .chapter__inner,
+      .contact-section__inner {
+        max-width: 100%;
+      }
+    }
+
+    /* small phones */
+    @media (max-width: 600px) {
+      .chapter__heading {
+        font-size: clamp(1.75rem, 8.5vw, 2.5rem);
+      }
+
+      .pull-quote {
+        font-size: 1.25rem;
+        max-width: 100%;
+      }
+
+      .prose {
+        font-size: 17px;
+      }
+
+      .contact-section__heading {
+        font-size: clamp(1.5rem, 7vw, 2rem);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── Mobile: horizontal progress bar ──────────────────────── -->
+  <div class="progress-bar" aria-hidden="true">
+    <div class="progress-bar__fill" id="progressFill"></div>
+  </div>
+
+  <!-- ── Mobile: compact sticky header ────────────────────────── -->
+  <header class="mobile-header" role="banner">
+    <span class="mobile-header__name">Matt Moseley</span>
+    <span class="mobile-header__role">Systems Eng.</span>
+  </header>
+
+  <!-- ── Desktop: signal line ──────────────────────────────────── -->
+  <div class="signal-line" aria-hidden="true">
+    <div class="signal-line__fill" id="signalFill"></div>
+  </div>
+
+  <div class="layout">
+
+    <!-- ────────────────────────────────────────────────────────────
+         FIXED LEFT SIDEBAR
+    ──────────────────────────────────────────────────────────── -->
+    <aside class="sidebar" role="complementary" aria-label="Navigation panel">
+
+      <div class="sidebar__identity">
+        <h1 class="sidebar__name">Matt Moseley</h1>
+        <p class="sidebar__role" aria-label="Title: Systems Engineer">Systems Engineer</p>
+
+        <nav aria-label="Chapter navigation">
+          <ul class="chapter-nav" id="chapterNav">
+            <li class="chapter-nav__item">
+              <a class="chapter-nav__link" href="#navy">
+                <span class="chapter-nav__dot" aria-hidden="true"></span>
+                01&nbsp;&nbsp;Navy
+              </a>
+            </li>
+            <li class="chapter-nav__item">
+              <a class="chapter-nav__link" href="#apple">
+                <span class="chapter-nav__dot" aria-hidden="true"></span>
+                02&nbsp;&nbsp;Apple
+              </a>
+            </li>
+            <li class="chapter-nav__item">
+              <a class="chapter-nav__link" href="#microsoft">
+                <span class="chapter-nav__dot" aria-hidden="true"></span>
+                03&nbsp;&nbsp;Microsoft
+              </a>
+            </li>
+            <li class="chapter-nav__item">
+              <a class="chapter-nav__link" href="#contact">
+                <span class="chapter-nav__dot" aria-hidden="true"></span>
+                04&nbsp;&nbsp;Contact
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <div class="sidebar__contact">
+        <a href="#" aria-label="Download Résumé as PDF">Résumé PDF&nbsp;↓</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile (opens in new tab)">LinkedIn&nbsp;↗</a>
+        <a href="mailto:" aria-label="Send Matt an email">Email&nbsp;↗</a>
+      </div>
+
+    </aside>
+
+    <!-- ────────────────────────────────────────────────────────────
+         SCROLLING NARRATIVE
+    ──────────────────────────────────────────────────────────── -->
+    <main class="content" role="main">
+
+      <!-- ── Chapter 1: Navy ───────────────────────────────────── -->
+      <section class="chapter" id="navy" aria-labelledby="h-navy">
+        <div class="chapter__inner">
+          <span class="eyebrow">2008–2013 &middot; U.S. Navy</span>
+          <h2 class="chapter__heading" id="h-navy">
+            I learned to find the fault<br>before it found us.
+          </h2>
+          <div class="prose">
+            <p>I started in audio &mdash; hence the old handle, thesoundman &mdash; and found my way into Navy electronics. SATCOM, RF communication systems, SHF and EHF gear. On shipboard equipment, there was no margin for missed faults. You learned to find the problem before it found you, because the systems couldn&rsquo;t wait and neither could the people depending on them.</p>
+            <p>That was where the instinct formed: signal, noise, and the discipline to tell them apart.</p>
+          </div>
+          <div class="skills" aria-label="Skills">
+            <div class="skills__chips">
+              <span class="skill-chip">RF</span>
+              <span class="skill-chip">SATCOM</span>
+              <span class="skill-chip">SHF/EHF</span>
+              <span class="skill-chip">Fault Isolation</span>
+              <span class="skill-chip">Electronics</span>
+            </div>
+          </div>
+          <p class="edu-note">Completed Navy electronics and strategic communications training alongside operational duties.</p>
+        </div>
+      </section>
+
+      <!-- ── Chapter 2: Apple ──────────────────────────────────── -->
+      <section class="chapter" id="apple" aria-labelledby="h-apple">
+        <div class="chapter__inner">
+          <span class="eyebrow">2013–2022 &middot; Apple</span>
+          <h2 class="chapter__heading" id="h-apple">
+            This work shipped in hundreds of millions<br>of iPhones and AirPods.
+          </h2>
+          <div class="prose">
+            <p>Nine years of RF desense analysis, wireless validation, factory test automation, lab debug, and systems integration. The scale still gets me &mdash; the same discipline from a ship&rsquo;s radio room, now applied to products in hundreds of millions of hands. The job was always the same: make the radio behave before the production line started moving.</p>
+            <p>That work shipped in iPhone&nbsp;13, iPhone&nbsp;14, iPhone&nbsp;15, and AirPods Pro.</p>
+          </div>
+          <blockquote class="pull-quote">
+            The fundamentals carried further than I expected: signal, noise, and where the two get confused.
+          </blockquote>
+          <div class="skills" aria-label="Skills">
+            <div class="skills__chips">
+              <span class="skill-chip">RF Desense</span>
+              <span class="skill-chip">Wireless Validation</span>
+              <span class="skill-chip">Factory Test</span>
+              <span class="skill-chip">Wi-Fi</span>
+              <span class="skill-chip">C++</span>
+              <span class="skill-chip">Swift</span>
+              <span class="skill-chip">Systems Integration</span>
+            </div>
+          </div>
+          <p class="edu-note">Completed B.S. Engineering (ABET-accredited) while working full time at Apple.</p>
+        </div>
+      </section>
+
+      <!-- ── Chapter 3: Microsoft ──────────────────────────────── -->
+      <section class="chapter" id="microsoft" aria-labelledby="h-microsoft">
+        <div class="chapter__inner">
+          <span class="eyebrow">2022–2025 &middot; Microsoft</span>
+          <h2 class="chapter__heading" id="h-microsoft">
+            Now I build the tooling every<br>Windows driver has to clear before it ships.
+          </h2>
+          <div class="prose">
+            <p>Windows driver quality tools &mdash; WDK, HLK, Driver Verifier, certification workflows, partner validation. Systems-level C/C++ work. The failure gets caught here, in the lab, not by someone debugging it at 2am.</p>
+            <p>Probably the only resume with both AirPods and Driver Verifier on it.</p>
+          </div>
+          <div class="skills" aria-label="Skills">
+            <div class="skills__chips">
+              <span class="skill-chip">WDK</span>
+              <span class="skill-chip">HLK</span>
+              <span class="skill-chip">Driver Verifier</span>
+              <span class="skill-chip">C++</span>
+              <span class="skill-chip">Validation</span>
+              <span class="skill-chip">Certification</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── Contact ───────────────────────────────────────────── -->
+      <section class="contact-section" id="contact" aria-labelledby="h-contact">
+        <div class="contact-section__inner">
+          <span class="eyebrow">04 &middot; Contact</span>
+          <h2 class="contact-section__heading" id="h-contact">Have a hard systems problem? That&rsquo;s the part I like. Let&rsquo;s talk.</h2>
+          <p class="contact-section__sub">Pacific Northwest &middot; Open to systems engineering roles</p>
+          <div class="contact-buttons">
+            <a href="#" class="btn btn--primary" aria-label="Download Résumé PDF">R&eacute;sum&eacute; PDF</a>
+            <a href="#" class="btn btn--ghost" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn (opens in new tab)">LinkedIn</a>
+            <a href="mailto:" class="btn btn--ghost" aria-label="Send an email">Email</a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div><!-- /.layout -->
+
+  <script>
+    (function () {
+      'use strict';
+
+      /* ── Reduced-motion gate ──────────────────────────────────── */
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ── Enable animation styles only when JS is present ──────── */
+      if (!reduceMotion) {
+        document.body.classList.add('js-animations');
+      }
+
+      /* ── Elements ─────────────────────────────────────────────── */
+      var signalFill   = document.getElementById('signalFill');
+      var progressFill = document.getElementById('progressFill');
+      var navLinks     = document.querySelectorAll('.chapter-nav__link');
+
+      /* ── Scroll progress via rAF ─────────────────────────────── */
+      var rafPending = false;
+
+      function updateProgress() {
+        var scrolled = window.scrollY || window.pageYOffset;
+        var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+        var pct = maxScroll > 0 ? Math.min(1, scrolled / maxScroll) : 0;
+
+        if (signalFill)   signalFill.style.transform   = 'scaleY('  + pct + ')';
+        if (progressFill) progressFill.style.transform = 'scaleX(' + pct + ')';
+        rafPending = false;
+      }
+
+      window.addEventListener('scroll', function () {
+        if (!rafPending) {
+          window.requestAnimationFrame(updateProgress);
+          rafPending = true;
+        }
+      }, { passive: true });
+
+      updateProgress(); /* set initial state */
+
+      /* ── Scrollspy ───────────────────────────────────────────── */
+      var sectionIds  = ['navy', 'apple', 'microsoft', 'contact'];
+      var linkBySect  = {};
+
+      navLinks.forEach(function (link) {
+        var id = link.getAttribute('href').replace('#', '');
+        linkBySect[id] = link;
+      });
+
+      function setActive(id) {
+        navLinks.forEach(function (l) { l.classList.remove('is-active'); });
+        if (linkBySect[id]) linkBySect[id].classList.add('is-active');
+      }
+
+      setActive('navy'); /* default */
+
+      var spyObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) setActive(entry.target.id);
+        });
+      }, {
+        rootMargin: '-35% 0px -45% 0px'
+      });
+
+      sectionIds.forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) spyObserver.observe(el);
+      });
+
+      /* Smooth-scroll on nav click */
+      navLinks.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          var target = document.querySelector(link.getAttribute('href'));
+          if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+
+      /* ── Fade-in animations ──────────────────────────────────── */
+      if (!reduceMotion) {
+
+        /* chapters + contact */
+        var fadeObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              fadeObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.07, rootMargin: '0px 0px -4% 0px' });
+
+        document.querySelectorAll('.chapter, .contact-section').forEach(function (el) {
+          fadeObserver.observe(el);
+        });
+
+        /* pull quotes — slide from left */
+        var quoteObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              quoteObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.25 });
+
+        document.querySelectorAll('.pull-quote').forEach(function (el) {
+          quoteObserver.observe(el);
+        });
+
+        /* skill chips — staggered */
+        var chipObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              var chips = entry.target.querySelectorAll('.skill-chip');
+              chips.forEach(function (chip, i) {
+                /* stagger delay injected as transition-delay */
+                chip.style.transitionDelay = (i * 55) + 'ms';
+                setTimeout(function () {
+                  chip.classList.add('is-visible');
+                }, i * 55);
+              });
+              chipObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.4 });
+
+        document.querySelectorAll('.skills__chips').forEach(function (el) {
+          chipObserver.observe(el);
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>

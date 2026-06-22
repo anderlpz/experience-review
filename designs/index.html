@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matt Moseley -- 3 Design Concepts</title>
+<style>
+*{box-sizing:border-box;margin:0}
+body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#e8e8e8;min-height:100dvh}
+.picker{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:12px 16px;
+  background:rgba(10,10,10,.88);backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  font-size:14px;
+}
+.picker button{
+  padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.12);
+  background:transparent;color:#999;font:inherit;cursor:pointer;
+  transition:all .2s ease;
+}
+.picker button:hover{border-color:rgba(255,255,255,.25);color:#ddd}
+.picker button.active{background:#fff;color:#0a0a0a;border-color:#fff;font-weight:600}
+.picker .label{color:#666;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-right:8px}
+iframe{
+  width:100%;height:calc(100dvh - 52px);margin-top:52px;
+  border:none;background:#0a0a0a;
+}
+</style>
+</head>
+<body>
+<div class="picker">
+  <span class="label">Design</span>
+  <button data-src="a.html" class="active">A: Signal Path</button>
+  <button data-src="b.html">B: Evidence Board</button>
+  <button data-src="c.html">C: The Terminal</button>
+</div>
+<iframe id="preview" src="a.html"></iframe>
+<script>
+const frame = document.getElementById('preview');
+const btns = document.querySelectorAll('.picker button[data-src]');
+btns.forEach(b => b.addEventListener('click', () => {
+  btns.forEach(x => x.classList.remove('active'));
+  b.classList.add('active');
+  frame.src = b.dataset.src;
+}));
+</script>
+</body>
+</html>

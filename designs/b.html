@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="Matt Moseley — Systems Engineer. 15 years where hardware meets software." />
+  <meta property="og:title" content="Matt Moseley · Systems Engineer" />
+  <meta property="og:description" content="15 years making the hardware-software boundary reliable. Navy · Apple · Microsoft." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image:alt" content="Matt Moseley portfolio" />
+  <title>Matt Moseley · Systems Engineer</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       Design Tokens
+    ───────────────────────────────────────────────────────────── */
+    :root {
+      --page:         #F4F5F7;
+      --tile:         #FFFFFF;
+      --tile-dark:    #0E1116;
+      --text-1:       #0B0C0E;
+      --text-2:       #41464E;
+      --text-3:       #6B7280;
+      --text-4:       #9AA1AC;
+      --on-dark-1:    #F5F7FA;
+      --on-dark-2:    #AEB6C2;
+      --accent:       #2D67E0;
+      --ok:           #1F9D6B;
+      --border:       #E3E6EA;
+      --shadow:       0 1px 2px rgba(11,12,14,.04), 0 8px 24px rgba(11,12,14,.06);
+      --shadow-hover: 0 12px 40px rgba(11,12,14,.12);
+      --tile-gloss:   inset 0 1px 0 rgba(255,255,255,.7);
+      --r-tile:       24px;
+      --gap:          16px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Reset
+    ───────────────────────────────────────────────────────────── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: var(--page);
+      color: var(--text-1);
+    }
+
+    body {
+      min-height: 100dvh;
+      padding:
+        env(safe-area-inset-top, 0px)
+        env(safe-area-inset-right, 0px)
+        env(safe-area-inset-bottom, 0px)
+        env(safe-area-inset-left, 0px);
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─────────────────────────────────────────────────────────────
+       Page Wrapper
+    ───────────────────────────────────────────────────────────── */
+    .page {
+      padding: 48px 24px 64px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Bento Grid
+    ───────────────────────────────────────────────────────────── */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Tile Base
+    ───────────────────────────────────────────────────────────── */
+    .tile {
+      background: var(--tile);
+      border-radius: var(--r-tile);
+      box-shadow: var(--shadow), var(--tile-gloss);
+      border: 1px solid var(--border);
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.22s cubic-bezier(0.4,0,0.2,1),
+                  box-shadow 0.22s cubic-bezier(0.4,0,0.2,1);
+      will-change: transform;
+    }
+
+    .tile:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover), var(--tile-gloss);
+    }
+
+    /* Eyebrow label */
+    .eyebrow {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      margin-bottom: 12px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Identity Tile
+    ───────────────────────────────────────────────────────────── */
+    .tile-identity {
+      grid-column: span 6;
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .identity-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      margin-bottom: 22px;
+    }
+
+    .avatar {
+      flex-shrink: 0;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #DDE2E9 0%, #C5CDD8 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 1.125rem;
+      color: var(--text-3);
+      letter-spacing: -0.01em;
+      border: 2px solid rgba(255,255,255,0.9);
+      box-shadow: 0 2px 8px rgba(11,12,14,.1);
+    }
+
+    .identity-meta {
+      padding-top: 4px;
+    }
+
+    .identity-name {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.75rem, 3vw, 2.5rem);
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--text-1);
+    }
+
+    .identity-title {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-3);
+      margin-top: 5px;
+    }
+
+    .identity-headline {
+      font-size: 1rem;
+      line-height: 1.65;
+      color: var(--text-2);
+      margin-bottom: 10px;
+    }
+
+    .identity-sub {
+      font-size: 0.875rem;
+      color: var(--text-3);
+      line-height: 1.55;
+      margin-bottom: 28px;
+    }
+
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 18px;
+      border-radius: 100px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      min-height: 44px;
+      min-width: 44px;
+      transition: opacity 0.15s ease, transform 0.12s ease, background 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .btn:active { transform: scale(0.96); }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text-2);
+      border: 1.5px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--page); border-color: #C8CDD4; }
+
+    /* ─────────────────────────────────────────────────────────────
+       Career Arc Tile
+    ───────────────────────────────────────────────────────────── */
+    .tile-arc {
+      grid-column: span 6;
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .arc-chart-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      margin: 8px -4px 0;
+      min-height: 0;
+    }
+
+    .arc-svg {
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    .arc-area {
+      fill: url(#arcAreaGrad);
+      opacity: 0;
+      animation: arcAreaReveal 2.2s cubic-bezier(0.4,0,0.2,1) 0.35s forwards;
+    }
+
+    @keyframes arcAreaReveal {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    .arc-path {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .arc-grid-line {
+      stroke: var(--border);
+      stroke-width: 1;
+      stroke-dasharray: 3 4;
+    }
+
+    .arc-node {
+      fill: var(--accent);
+    }
+
+    .arc-node-ring {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 1.5;
+      opacity: 0;
+      animation: nodePulse 2.8s ease-out 2.8s infinite;
+    }
+
+    @keyframes nodePulse {
+      0%   { r: 6; opacity: 0.55; }
+      100% { r: 16; opacity: 0; }
+    }
+
+    .arc-phase-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      fill: var(--text-3);
+      letter-spacing: 0.04em;
+    }
+
+    .arc-year-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      font-weight: 500;
+      fill: var(--text-4);
+    }
+
+    .arc-tagline {
+      font-size: 0.875rem;
+      line-height: 1.55;
+      color: var(--text-3);
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      margin-top: 12px;
+    }
+
+    .arc-tagline strong {
+      color: var(--text-2);
+      font-weight: 600;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Roles Section — Sub-Grid
+    ───────────────────────────────────────────────────────────── */
+    .roles-section {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(12, 1fr); /* fallback */
+      grid-template-columns: subgrid;
+      row-gap: var(--gap);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Role Tile (Expandable)
+    ───────────────────────────────────────────────────────────── */
+    .tile-role {
+      grid-column: span 4;
+      grid-row: span 2;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Subtle background textures */
+    .tile-role::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      border-radius: inherit;
+      opacity: 1;
+    }
+
+    /* Navy — radar arcs from bottom-right corner */
+    .tile-navy::before {
+      background-image:
+        radial-gradient(circle at 115% 115%, transparent 55px,  rgba(45,103,224,.048) 55px,  rgba(45,103,224,.048) 57px,  transparent 57px),
+        radial-gradient(circle at 115% 115%, transparent 100px, rgba(45,103,224,.038) 100px, rgba(45,103,224,.038) 102px, transparent 102px),
+        radial-gradient(circle at 115% 115%, transparent 155px, rgba(45,103,224,.028) 155px, rgba(45,103,224,.028) 157px, transparent 157px),
+        radial-gradient(circle at 115% 115%, transparent 215px, rgba(45,103,224,.018) 215px, rgba(45,103,224,.018) 217px, transparent 217px);
+    }
+
+    /* Apple — vertical spectrum bands */
+    .tile-apple::before {
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 16px,
+        rgba(45,103,224,.026) 16px,
+        rgba(45,103,224,.026) 17px
+      );
+    }
+
+    /* Microsoft — precise dot grid */
+    .tile-microsoft::before {
+      background-image:
+        repeating-linear-gradient(rgba(45,103,224,.035) 1px, transparent 1px),
+        repeating-linear-gradient(90deg, rgba(45,103,224,.035) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    .role-header { margin-bottom: 10px; }
+
+    .role-company {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.25rem, 1.8vw, 1.625rem);
+      letter-spacing: -0.028em;
+      color: var(--text-1);
+      line-height: 1.12;
+    }
+
+    .role-period {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 4px;
+      letter-spacing: -0.01em;
+    }
+
+    .role-title {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-2);
+      margin-top: 2px;
+    }
+
+    .role-hook {
+      font-size: 0.9375rem;
+      line-height: 1.58;
+      color: var(--text-3);
+      margin-top: 12px;
+      font-style: italic;
+      flex: 1;
+    }
+
+    /* Expand hint */
+    .expand-hint {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-4);
+      margin-top: auto;
+      padding-top: 16px;
+      transition: color 0.18s ease;
+    }
+
+    .tile-role:hover .expand-hint { color: var(--accent); }
+    .tile-role.expanded .expand-hint { display: none; }
+
+    .expand-icon {
+      display: inline-flex;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--border);
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      line-height: 1;
+      font-style: normal;
+      transition: background 0.18s ease, transform 0.25s cubic-bezier(0.4,0,0.2,1);
+      flex-shrink: 0;
+    }
+
+    .tile-role:hover .expand-icon { background: rgba(45,103,224,.12); color: var(--accent); }
+    .tile-role.expanded .expand-icon { transform: rotate(45deg); }
+
+    /* Expanded body */
+    .role-body {
+      display: none;
+      margin-top: 16px;
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+      animation: bodyFadeIn 0.3s cubic-bezier(0.4,0,0.2,1) forwards;
+    }
+
+    @keyframes bodyFadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .tile-role.expanded .role-body { display: block; }
+    .tile-role.expanded .role-hook { display: none; }
+
+    .role-desc {
+      font-size: 0.9375rem;
+      line-height: 1.65;
+      color: var(--text-2);
+      margin-bottom: 16px;
+    }
+
+    .role-shipped-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      margin-bottom: 6px;
+    }
+
+    .role-shipped-list {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--ok);
+      margin-bottom: 16px;
+    }
+
+    .role-edu {
+      font-size: 0.8125rem;
+      color: var(--text-3);
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Collapsed strip — when another role is expanded (desktop) */
+    .tile-role.strip .role-hook,
+    .tile-role.strip .expand-hint,
+    .tile-role.strip .role-title {
+      display: none;
+    }
+
+    .tile-role.strip .role-company {
+      font-size: 1rem;
+    }
+
+    .tile-role.strip .role-period {
+      font-size: 0.75rem;
+    }
+
+    /* Expanded column spans */
+    .roles-section[data-expanded="navy"]      .tile-navy      { grid-column: span 8; }
+    .roles-section[data-expanded="navy"]      .tile-apple     { grid-column: span 2; }
+    .roles-section[data-expanded="navy"]      .tile-microsoft { grid-column: span 2; }
+
+    .roles-section[data-expanded="apple"]     .tile-navy      { grid-column: span 2; }
+    .roles-section[data-expanded="apple"]     .tile-apple     { grid-column: span 8; }
+    .roles-section[data-expanded="apple"]     .tile-microsoft { grid-column: span 2; }
+
+    .roles-section[data-expanded="microsoft"] .tile-navy      { grid-column: span 2; }
+    .roles-section[data-expanded="microsoft"] .tile-apple     { grid-column: span 2; }
+    .roles-section[data-expanded="microsoft"] .tile-microsoft { grid-column: span 8; }
+
+    /* ─────────────────────────────────────────────────────────────
+       Chips
+    ───────────────────────────────────────────────────────────── */
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 11px;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #EEF0F3;
+      color: var(--text-2);
+      white-space: nowrap;
+    }
+
+    .chip-rf       { background: rgba(45,103,224,.09);  color: var(--accent); }
+    .chip-sw       { background: rgba(31,157,107,.09);  color: #177a53; }
+    .chip-platform { background: rgba(65,70,78,.07);    color: var(--text-2); }
+
+    /* ─────────────────────────────────────────────────────────────
+       Shipped Products Tile (Dark)
+    ───────────────────────────────────────────────────────────── */
+    .tile-shipped {
+      grid-column: span 5;
+      grid-row: span 2;
+      background: var(--tile-dark);
+      border-color: rgba(255,255,255,.06);
+      box-shadow: var(--shadow);
+    }
+
+    .tile-shipped:hover {
+      box-shadow: var(--shadow-hover);
+    }
+
+    .shipped-eyebrow {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--on-dark-2);
+      margin-bottom: 10px;
+      opacity: 0.7;
+    }
+
+    .shipped-heading {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.25rem, 1.8vw, 1.75rem);
+      letter-spacing: -0.028em;
+      color: var(--on-dark-1);
+      margin-bottom: 6px;
+      line-height: 1.15;
+    }
+
+    .shipped-sub {
+      font-size: 0.875rem;
+      color: var(--on-dark-2);
+      margin-bottom: 22px;
+      line-height: 1.5;
+    }
+
+    .product-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .product-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 14px;
+      border-radius: 100px;
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.1);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--on-dark-1);
+      transition: background 0.15s ease;
+    }
+
+    .product-pill:hover { background: rgba(255,255,255,.11); }
+
+    .pill-check {
+      color: var(--ok);
+      font-size: 0.75rem;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Metric Tile
+    ───────────────────────────────────────────────────────────── */
+    .tile-metric {
+      grid-column: span 3;
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .metric-primary { flex-shrink: 0; }
+
+    .metric-big {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: clamp(3.5rem, 6vw, 5rem);
+      letter-spacing: -0.04em;
+      line-height: 0.92;
+      color: var(--text-1);
+      font-feature-settings: "tnum" 1;
+    }
+
+    .metric-label {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--text-3);
+      line-height: 1.45;
+      margin-top: 10px;
+    }
+
+    .metric-divider {
+      width: 28px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    .metric-secondary {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .metric-stat {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .metric-stat-num {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: -0.03em;
+      color: var(--text-1);
+      font-feature-settings: "tnum" 1;
+      line-height: 1;
+    }
+
+    .metric-stat-label {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-3);
+      line-height: 1.3;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Skills Tile
+    ───────────────────────────────────────────────────────────── */
+    .tile-skills {
+      grid-column: span 4;
+      grid-row: span 2;
+    }
+
+    .skills-heading {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: 1.125rem;
+      letter-spacing: -0.02em;
+      color: var(--text-1);
+      margin-bottom: 20px;
+    }
+
+    .skill-group { margin-bottom: 18px; }
+    .skill-group:last-child { margin-bottom: 0; }
+
+    .skill-group-label {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--text-4);
+      margin-bottom: 8px;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Contact Tile (full-width CTA)
+    ───────────────────────────────────────────────────────────── */
+    .tile-contact {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 28px 36px;
+      flex-wrap: wrap;
+    }
+
+    .contact-left {}
+
+    .contact-headline {
+      font-family: 'Manrope', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.125rem, 2.2vw, 1.5rem);
+      letter-spacing: -0.025em;
+      color: var(--text-1);
+      line-height: 1.2;
+    }
+
+    .contact-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 16px;
+      margin-top: 6px;
+    }
+
+    .contact-meta-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-3);
+    }
+
+    .status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--ok);
+      animation: statusPulse 2.6s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(31,157,107,.4); }
+      50%       { opacity: .85; box-shadow: 0 0 0 5px rgba(31,157,107,0); }
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Responsive — Tablet (≤900px)
+    ───────────────────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .bento-grid { grid-template-columns: repeat(6, 1fr); }
+
+      .tile-identity { grid-column: span 6; grid-row: span 1; }
+      .tile-arc      { grid-column: span 6; grid-row: span 1; }
+
+      .roles-section {
+        grid-template-columns: repeat(6, 1fr) !important;
+      }
+
+      .tile-role { grid-column: span 6 !important; grid-row: span 1; min-height: 160px; }
+
+      .tile-shipped { grid-column: span 6; grid-row: span 1; }
+      .tile-metric  { grid-column: span 3; grid-row: span 1; }
+      .tile-skills  { grid-column: span 3; grid-row: span 1; }
+
+      .tile-contact { padding: 24px 28px; }
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Responsive — Mobile (≤600px)
+    ───────────────────────────────────────────────────────────── */
+    @media (max-width: 600px) {
+      .page { padding: 20px 12px 48px; }
+
+      .bento-grid { grid-template-columns: 1fr; gap: 12px; }
+
+      .tile-identity,
+      .tile-arc,
+      .tile-shipped,
+      .tile-metric,
+      .tile-skills { grid-column: 1; grid-row: span 1; }
+
+      .roles-section {
+        grid-template-columns: 1fr !important;
+        row-gap: 12px;
+      }
+
+      .tile-role { grid-column: 1 !important; grid-row: span 1 !important; min-height: 0; }
+
+      .tile-metric { min-height: 160px; }
+
+      .tile-contact {
+        grid-column: 1;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+        padding: 24px;
+      }
+
+      .metric-big { font-size: clamp(3rem, 16vw, 4.5rem); }
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       Reduced Motion
+    ───────────────────────────────────────────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      .tile,
+      .tile-role,
+      .btn { transition: none !important; }
+
+      .arc-area,
+      .arc-node-ring,
+      .status-dot { animation: none !important; }
+
+      .arc-area { opacity: 1 !important; }
+
+      .role-body { animation: none !important; }
+
+      /* Make arc immediately visible */
+      .arc-path {
+        stroke-dasharray: none !important;
+        stroke-dashoffset: 0 !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <main class="bento-grid" id="bentoGrid" role="main" aria-label="Matt Moseley portfolio">
+
+      <!-- ────────────────────────────────────────────────────────
+           IDENTITY TILE
+      ──────────────────────────────────────────────────────────── -->
+      <article class="tile tile-identity" id="tileIdentity">
+        <div class="identity-top">
+          <div class="avatar" role="img" aria-label="Matt Moseley initials">MM</div>
+          <div class="identity-meta">
+            <h1 class="identity-name">Matt Moseley</h1>
+            <p class="identity-title">Systems Engineer</p>
+          </div>
+        </div>
+
+        <p class="identity-headline">
+          I work where hardware meets software&thinsp;—&thinsp;the seam where things tend to break&thinsp;—&thinsp;and I've spent fifteen years making sure they don't.
+        </p>
+        <p class="identity-sub">
+          Started in audio, worked into RF and systems engineering.
+        </p>
+
+        <div class="btn-group" role="group" aria-label="Contact options">
+          <a href="#" class="btn btn-primary" aria-label="Download resume">
+            <svg width="13" height="14" viewBox="0 0 13 14" fill="none" aria-hidden="true">
+              <path d="M8 1H3a1 1 0 00-1 1v10a1 1 0 001 1h7a1 1 0 001-1V5L8 1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+              <path d="M8 1v4h4M4.5 8.5h4M4.5 11h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Resume
+          </a>
+          <a href="https://linkedin.com/in/mattmoseley" class="btn btn-ghost" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+              <circle cx="4" cy="4" r="2"/>
+            </svg>
+            LinkedIn
+          </a>
+          <a href="mailto:matt@moseley.io" class="btn btn-ghost" aria-label="Send email to matt@moseley.io">
+            <svg width="14" height="12" viewBox="0 0 14 12" fill="none" aria-hidden="true">
+              <rect x="1" y="1" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M1 3.5l6 4 6-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            Email
+          </a>
+        </div>
+      </article>
+
+      <!-- ────────────────────────────────────────────────────────
+           CAREER ARC TILE
+      ──────────────────────────────────────────────────────────── -->
+      <article class="tile tile-arc" id="tileArc" aria-label="Career timeline">
+        <p class="eyebrow">Career arc · 2008–2025</p>
+
+        <div class="arc-chart-wrap">
+          <svg class="arc-svg" viewBox="0 0 560 120" preserveAspectRatio="xMidYMid meet"
+               aria-label="Sparkline showing career trajectory across Navy, Apple, and Microsoft phases" role="img">
+            <defs>
+              <linearGradient id="arcAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%"   stop-color="#2D67E0" stop-opacity="0.14"/>
+                <stop offset="100%" stop-color="#2D67E0" stop-opacity="0.02"/>
+              </linearGradient>
+              <clipPath id="arcRevealClip">
+                <rect id="arcRevealRect" x="0" y="0" width="560" height="120"/>
+              </clipPath>
+            </defs>
+
+            <!-- Phase divider lines (vertical) -->
+            <line class="arc-grid-line" x1="20"  y1="18" x2="20"  y2="98"/>
+            <line class="arc-grid-line" x1="173" y1="18" x2="173" y2="98"/>
+            <line class="arc-grid-line" x1="448" y1="18" x2="448" y2="98"/>
+            <line class="arc-grid-line" x1="540" y1="18" x2="540" y2="98"/>
+
+            <!-- Phase labels -->
+            <text class="arc-phase-label" x="96"  y="13" text-anchor="middle">Navy</text>
+            <text class="arc-phase-label" x="310" y="13" text-anchor="middle">Apple</text>
+            <text class="arc-phase-label" x="494" y="13" text-anchor="middle">Microsoft</text>
+
+            <!-- Area fill — same path closed to baseline -->
+            <path class="arc-area"
+              d="M 20,72 C 55,54 90,85 120,68 C 148,54 162,64 173,68
+                 C 200,45 255,90 295,62 C 335,36 392,86 448,62
+                 C 482,38 520,25 540,48
+                 L 540,100 L 20,100 Z"
+              clip-path="url(#arcRevealClip)"/>
+
+            <!-- The sparkline stroke path -->
+            <path class="arc-path" id="arcPath"
+              d="M 20,72 C 55,54 90,85 120,68 C 148,54 162,64 173,68
+                 C 200,45 255,90 295,62 C 335,36 392,86 448,62
+                 C 482,38 520,25 540,48"/>
+
+            <!-- Node circles -->
+            <circle class="arc-node" cx="20"  cy="72" r="4.5"/>
+            <circle class="arc-node" cx="173" cy="68" r="4.5"/>
+            <circle class="arc-node" cx="448" cy="62" r="4.5"/>
+            <circle class="arc-node" cx="540" cy="48" r="4.5"/>
+            <!-- Pulse ring on current position -->
+            <circle class="arc-node-ring" cx="540" cy="48" r="8"/>
+
+            <!-- Year labels -->
+            <text class="arc-year-label" x="20"  y="112" text-anchor="middle">2008</text>
+            <text class="arc-year-label" x="173" y="112" text-anchor="middle">2013</text>
+            <text class="arc-year-label" x="448" y="112" text-anchor="middle">2022</text>
+            <text class="arc-year-label" x="540" y="112" text-anchor="middle">2025</text>
+          </svg>
+        </div>
+
+        <p class="arc-tagline">
+          <strong>15 years · 3 employers · 1 constant:</strong> making the hardware–software boundary reliable
+        </p>
+      </article>
+
+      <!-- ────────────────────────────────────────────────────────
+           ROLES SECTION (expandable tiles, sub-grid)
+      ──────────────────────────────────────────────────────────── -->
+      <section class="roles-section" id="rolesSection" aria-label="Career roles">
+
+        <!-- U.S. Navy -->
+        <article class="tile tile-role tile-navy" id="roleNavy"
+          data-role="navy"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+          aria-controls="navyBody"
+          aria-label="U.S. Navy — click to expand">
+
+          <div class="role-header">
+            <div class="role-company">U.S. Navy</div>
+            <div class="role-period">2008 – 2013</div>
+            <div class="role-title">Electronics Technician · E-6</div>
+          </div>
+          <p class="role-hook">"I learned to find the fault before it found us."</p>
+
+          <div class="role-body" id="navyBody" aria-hidden="true">
+            <p class="role-desc">
+              Five years diagnosing and repairing complex shipboard electronic systems — radar, SATCOM, communications. Learned to trace a fault through hundreds of connectors, schematics, and failure modes under real operational pressure. When systems fail at sea, there's no calling support.
+            </p>
+            <p class="role-shipped-label">Education</p>
+            <p class="role-shipped-list">B.S. Electronics Engineering Technology (completed in-service)</p>
+            <div class="chip-group">
+              <span class="chip chip-rf">RF Systems</span>
+              <span class="chip chip-rf">SATCOM</span>
+              <span class="chip chip-rf">RADAR</span>
+              <span class="chip chip-platform">Fault Isolation</span>
+              <span class="chip chip-platform">Technical Documentation</span>
+              <span class="chip chip-platform">SIGINT</span>
+            </div>
+          </div>
+
+          <div class="expand-hint" aria-hidden="true">
+            <span class="expand-icon">+</span>
+            Expand role
+          </div>
+        </article>
+
+        <!-- Apple -->
+        <article class="tile tile-role tile-apple" id="roleApple"
+          data-role="apple"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+          aria-controls="appleBody"
+          aria-label="Apple — click to expand">
+
+          <div class="role-header">
+            <div class="role-company">Apple</div>
+            <div class="role-period">2013 – 2022</div>
+            <div class="role-title">RF Systems Engineer</div>
+          </div>
+          <p class="role-hook">"When your work is in 800 million pockets, 'close enough' isn't in the dictionary."</p>
+
+          <div class="role-body" id="appleBody" aria-hidden="true">
+            <p class="role-desc">
+              Nine years bringing cellular, Wi-Fi, Bluetooth, and UWB performance into the world's most-scrutinized devices. Owned RF front-end integration, antenna characterization, test automation, and carrier certification across six iPhone generations and AirPods Pro.
+            </p>
+            <p class="role-shipped-label">Shipped on</p>
+            <p class="role-shipped-list">iPhone 13 · iPhone 14 · iPhone 15 · AirPods Pro</p>
+            <div class="chip-group">
+              <span class="chip chip-rf">RF Integration</span>
+              <span class="chip chip-rf">Wi-Fi / BT / UWB</span>
+              <span class="chip chip-rf">Antenna Characterization</span>
+              <span class="chip chip-sw">C++</span>
+              <span class="chip chip-sw">Swift</span>
+              <span class="chip chip-sw">Python</span>
+              <span class="chip chip-platform">Carrier Certification</span>
+            </div>
+            <p class="role-edu">M.S. Electrical Engineering (completed while at Apple)</p>
+          </div>
+
+          <div class="expand-hint" aria-hidden="true">
+            <span class="expand-icon">+</span>
+            Expand role
+          </div>
+        </article>
+
+        <!-- Microsoft -->
+        <article class="tile tile-role tile-microsoft" id="roleMicrosoft"
+          data-role="microsoft"
+          role="button"
+          tabindex="0"
+          aria-expanded="false"
+          aria-controls="msBody"
+          aria-label="Microsoft — click to expand">
+
+          <div class="role-header">
+            <div class="role-company">Microsoft</div>
+            <div class="role-period">2022 – Present</div>
+            <div class="role-title">Driver Quality &amp; Platform Tooling</div>
+          </div>
+          <p class="role-hook">"The invisible infrastructure that makes hardware reliable at scale."</p>
+
+          <div class="role-body" id="msBody" aria-hidden="true">
+            <p class="role-desc">
+              Building and maintaining the diagnostic and certification infrastructure that Windows OEMs rely on. Improved driver verification test coverage across the Windows Hardware Lab Kit and Driver Development Kit&thinsp;—&thinsp;tools that ship inside every Windows release.
+            </p>
+            <p class="role-shipped-label">Ships in</p>
+            <p class="role-shipped-list">Driver Verifier · Windows HLK · WDK</p>
+            <div class="chip-group">
+              <span class="chip chip-platform">Windows Driver Stack</span>
+              <span class="chip chip-platform">WDK</span>
+              <span class="chip chip-platform">HLK</span>
+              <span class="chip chip-sw">C++</span>
+              <span class="chip chip-sw">Python</span>
+              <span class="chip chip-platform">Test Automation</span>
+              <span class="chip chip-platform">Certification Standards</span>
+            </div>
+          </div>
+
+          <div class="expand-hint" aria-hidden="true">
+            <span class="expand-icon">+</span>
+            Expand role
+          </div>
+        </article>
+
+      </section>
+
+      <!-- ────────────────────────────────────────────────────────
+           SHIPPED PRODUCTS TILE (dark)
+      ──────────────────────────────────────────────────────────── -->
+      <article class="tile tile-shipped" id="tileShipped" aria-label="Products shipped">
+        <p class="shipped-eyebrow">What shipped</p>
+        <h2 class="shipped-heading">Products I've shipped</h2>
+        <p class="shipped-sub">Hardware and software that reached hundreds of millions of people.</p>
+
+        <div class="product-pills" role="list">
+          <div class="product-pill" role="listitem">
+            <span class="pill-check" aria-hidden="true">✓</span>iPhone 13
+          </div>
+          <div class="product-pill" role="listitem">
+            <span class="pill-check" aria-hidden="true">✓</span>iPhone 14
+          </div>
+          <div class="product-pill" role="listitem">
+            <span class="pill-check" aria-hidden="true">✓</span>iPhone 15
+          </div>
+          <div class="product-pill" role="listitem">
+            <span class="pill-check" aria-hidden="true">✓</span>AirPods Pro
+          </div>
+          <div class="product-pill" role="listitem">
+            <span class="pill-check" aria-hidden="true">✓</span>Driver Verifier
+          </div>
+          <div class="product-pill" role="listitem">
+            <span class="pill-check" aria-hidden="true">✓</span>Windows HLK
+          </div>
+          <div class="product-pill" role="listitem">
+            <span class="pill-check" aria-hidden="true">✓</span>WDK
+          </div>
+        </div>
+      </article>
+
+      <!-- ────────────────────────────────────────────────────────
+           METRIC TILE
+      ──────────────────────────────────────────────────────────── -->
+      <article class="tile tile-metric" id="tileMetric" aria-label="Career statistics">
+        <div class="metric-primary">
+          <div class="metric-big" aria-label="15 years">15</div>
+          <div class="metric-label">years in systems<br>engineering</div>
+        </div>
+
+        <div class="metric-divider" aria-hidden="true"></div>
+
+        <div class="metric-secondary">
+          <div class="metric-stat">
+            <span class="metric-stat-num" aria-label="3 employers">3</span>
+            <span class="metric-stat-label">employers</span>
+          </div>
+          <div class="metric-stat">
+            <span class="metric-stat-num" aria-label="100 million plus devices">100M+</span>
+            <span class="metric-stat-label">devices shipped</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- ────────────────────────────────────────────────────────
+           SKILLS TILE
+      ──────────────────────────────────────────────────────────── -->
+      <article class="tile tile-skills" id="tileSkills" aria-label="Skills">
+        <h2 class="skills-heading">Skills</h2>
+
+        <div class="skill-group">
+          <div class="skill-group-label">RF / Signal</div>
+          <div class="chip-group">
+            <span class="chip chip-rf">RF Integration</span>
+            <span class="chip chip-rf">SATCOM</span>
+            <span class="chip chip-rf">Wi-Fi / BT / UWB</span>
+            <span class="chip chip-rf">Desense Analysis</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Software</div>
+          <div class="chip-group">
+            <span class="chip chip-sw">C++</span>
+            <span class="chip chip-sw">Swift</span>
+            <span class="chip chip-sw">Python</span>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="skill-group-label">Platform</div>
+          <div class="chip-group">
+            <span class="chip chip-platform">WDK</span>
+            <span class="chip chip-platform">HLK</span>
+            <span class="chip chip-platform">Driver Verifier</span>
+            <span class="chip chip-platform">Certification</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- ────────────────────────────────────────────────────────
+           CONTACT TILE (full-width CTA)
+      ──────────────────────────────────────────────────────────── -->
+      <article class="tile tile-contact" id="tileContact">
+        <div class="contact-left">
+          <h2 class="contact-headline">Have a hard systems problem? Let's talk.</h2>
+          <div class="contact-meta" role="list">
+            <span class="contact-meta-item" role="listitem">
+              <span class="status-dot" aria-hidden="true"></span>
+              <span>Open to roles</span>
+            </span>
+            <span class="contact-meta-item" role="listitem">Pacific Northwest</span>
+          </div>
+        </div>
+
+        <div class="btn-group">
+          <a href="mailto:matt@moseley.io" class="btn btn-primary" aria-label="Email Matt at matt@moseley.io">
+            <svg width="14" height="12" viewBox="0 0 14 12" fill="none" aria-hidden="true">
+              <rect x="1" y="1" width="12" height="10" rx="1.5" stroke="currentColor" stroke-width="1.4"/>
+              <path d="M1 3.5l6 4 6-4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+            matt@moseley.io
+          </a>
+        </div>
+      </article>
+
+    </main>
+  </div>
+
+  <script>
+    /* ──────────────────────────────────────────────────────────────
+       Career Arc — stroke-dasharray animation
+    ────────────────────────────────────────────────────────────── */
+    (function initArc() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      const path = document.getElementById('arcPath');
+      if (!path) return;
+
+      function animate() {
+        const len = path.getTotalLength();
+        path.style.strokeDasharray  = len;
+        path.style.strokeDashoffset = len;
+        // Force a layout read so the browser registers the start state
+        path.getBoundingClientRect();
+        path.style.transition = 'stroke-dashoffset 2s cubic-bezier(0.4, 0, 0.2, 1) 0.35s';
+        path.style.strokeDashoffset = 0;
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => setTimeout(animate, 80));
+      } else {
+        setTimeout(animate, 80);
+      }
+    })();
+
+    /* ──────────────────────────────────────────────────────────────
+       Role Tile Expand / Collapse with FLIP animation
+    ────────────────────────────────────────────────────────────── */
+    (function initRoles() {
+      var rolesSection = document.getElementById('rolesSection');
+      var roleTiles    = Array.from(document.querySelectorAll('.tile-role'));
+      var isMobile     = window.innerWidth <= 900;
+
+      // Update breakpoint on resize
+      window.addEventListener('resize', function() {
+        isMobile = window.innerWidth <= 900;
+        // On resize, clear expanded state for clean start
+        if (isMobile) {
+          rolesSection.removeAttribute('data-expanded');
+          roleTiles.forEach(function(t) {
+            t.classList.remove('strip');
+          });
+        }
+      }, { passive: true });
+
+      /* ── Measure all tile positions ── */
+      function snapshot(tiles) {
+        var map = new Map();
+        tiles.forEach(function(t) {
+          map.set(t.dataset.role, t.getBoundingClientRect());
+        });
+        return map;
+      }
+
+      /* ── Apply FLIP animation to all affected tiles ── */
+      function flip(tiles, before) {
+        requestAnimationFrame(function() {
+          var moves = [];
+
+          tiles.forEach(function(t) {
+            var first = before.get(t.dataset.role);
+            if (!first) return;
+            var last  = t.getBoundingClientRect();
+            var dx     = first.left  - last.left;
+            var dy     = first.top   - last.top;
+            var scaleX = first.width  / (last.width  || 1);
+            var scaleY = first.height / (last.height || 1);
+
+            // Only animate if there's a meaningful change
+            if (Math.abs(dx) < 1 && Math.abs(dy) < 1 &&
+                Math.abs(scaleX - 1) < 0.008 && Math.abs(scaleY - 1) < 0.008) return;
+
+            moves.push({ tile: t, dx: dx, dy: dy, scaleX: scaleX, scaleY: scaleY });
+          });
+
+          if (!moves.length) return;
+
+          // Invert — set transforms to make tiles appear at old positions
+          moves.forEach(function(m) {
+            m.tile.style.transition    = 'none';
+            m.tile.style.transformOrigin = 'top left';
+            m.tile.style.transform     =
+              'translate(' + m.dx + 'px, ' + m.dy + 'px) scale(' + m.scaleX + ', ' + m.scaleY + ')';
+          });
+
+          // Force layout flush
+          moves[0].tile.offsetWidth; // eslint-disable-line no-unused-expressions
+
+          // Play — animate to natural positions
+          requestAnimationFrame(function() {
+            moves.forEach(function(m) {
+              m.tile.style.transition  = 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+              m.tile.style.transform   = '';
+            });
+
+            // Cleanup after animation
+            moves.forEach(function(m) {
+              m.tile.addEventListener('transitionend', function cleanup(e) {
+                if (e.propertyName !== 'transform') return;
+                m.tile.style.transition      = '';
+                m.tile.style.transform       = '';
+                m.tile.style.transformOrigin = '';
+                m.tile.removeEventListener('transitionend', cleanup);
+              });
+            });
+          });
+        });
+      }
+
+      /* ── Toggle a role ── */
+      function toggleRole(roleName) {
+        var before          = snapshot(roleTiles);
+        var currentExpanded = rolesSection.getAttribute('data-expanded');
+        var isCollapsing    = (currentExpanded === roleName);
+
+        // Reset all
+        roleTiles.forEach(function(t) {
+          t.classList.remove('expanded', 'strip');
+          t.setAttribute('aria-expanded', 'false');
+          var body = t.querySelector('.role-body');
+          if (body) body.setAttribute('aria-hidden', 'true');
+        });
+
+        if (isCollapsing) {
+          // Collapse — remove expansion
+          rolesSection.removeAttribute('data-expanded');
+        } else {
+          // Expand selected
+          rolesSection.setAttribute('data-expanded', roleName);
+          var target = rolesSection.querySelector('[data-role="' + roleName + '"]');
+          if (target) {
+            target.classList.add('expanded');
+            target.setAttribute('aria-expanded', 'true');
+            var body = target.querySelector('.role-body');
+            if (body) body.setAttribute('aria-hidden', 'false');
+          }
+
+          // Mark non-desktop: don't strip on mobile
+          if (!isMobile) {
+            roleTiles.forEach(function(t) {
+              if (t.dataset.role !== roleName) {
+                t.classList.add('strip');
+              }
+            });
+          }
+
+          // Run FLIP (only on desktop)
+          if (!isMobile) {
+            flip(roleTiles, before);
+          }
+        }
+      }
+
+      /* ── Bind events ── */
+      roleTiles.forEach(function(tile) {
+        tile.addEventListener('click', function() {
+          toggleRole(tile.dataset.role);
+        });
+
+        tile.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleRole(tile.dataset.role);
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
