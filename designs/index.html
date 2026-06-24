@@ -2,49 +2,152 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Matt Moseley -- 3 Design Concepts</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Matt Moseley — 3 Design Concepts</title>
 <style>
-*{box-sizing:border-box;margin:0}
-body{font-family:system-ui,sans-serif;background:#0a0a0a;color:#e8e8e8;min-height:100dvh}
-.picker{
-  position:fixed;top:0;left:0;right:0;z-index:9999;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  padding:12px 16px;
-  background:rgba(10,10,10,.88);backdrop-filter:blur(16px);
-  border-bottom:1px solid rgba(255,255,255,.08);
-  font-size:14px;
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0a0a0a;
+  color: #e8e8e8;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(32px, env(safe-area-inset-top, 32px))
+    max(20px, env(safe-area-inset-right, 20px))
+    max(32px, env(safe-area-inset-bottom, 32px))
+    max(20px, env(safe-area-inset-left, 20px));
+  -webkit-font-smoothing: antialiased;
 }
-.picker button{
-  padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.12);
-  background:transparent;color:#999;font:inherit;cursor:pointer;
-  transition:all .2s ease;
+
+.header {
+  text-align: center;
+  margin-bottom: clamp(28px, 6vw, 48px);
 }
-.picker button:hover{border-color:rgba(255,255,255,.25);color:#ddd}
-.picker button.active{background:#fff;color:#0a0a0a;border-color:#fff;font-weight:600}
-.picker .label{color:#666;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-right:8px}
-iframe{
-  width:100%;height:calc(100dvh - 52px);margin-top:52px;
-  border:none;background:#0a0a0a;
+
+.header__title {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #f0f0f0;
+  letter-spacing: -0.01em;
+  margin-bottom: 6px;
+}
+
+.header__sub {
+  font-size: 0.75rem;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.cards {
+  width: 100%;
+  max-width: 460px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #111;
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 14px;
+  padding: 20px 22px;
+  text-decoration: none;
+  color: inherit;
+  min-height: 80px;
+  transition: background 0.18s ease, border-color 0.18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card:hover {
+  background: #181818;
+  border-color: rgba(255,255,255,.14);
+}
+
+.card:active {
+  background: #1f1f1f;
+  transform: scale(0.99);
+}
+
+.card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.card__name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 4px;
+  line-height: 1.25;
+}
+
+.card__desc {
+  font-size: 0.8125rem;
+  color: #777;
+  line-height: 1.45;
+}
+
+.card__arrow {
+  font-size: 1.125rem;
+  color: #444;
+  flex-shrink: 0;
+  transition: color 0.18s ease, transform 0.18s ease;
+  line-height: 1;
+}
+
+.card:hover .card__arrow,
+.card:focus-visible .card__arrow {
+  color: #999;
+  transform: translateX(3px);
+}
+
+.card:focus-visible {
+  outline: 2px solid rgba(255,255,255,.3);
+  outline-offset: 2px;
 }
 </style>
 </head>
 <body>
-<div class="picker">
-  <span class="label">Design</span>
-  <button data-src="a.html" class="active">A: Signal Path</button>
-  <button data-src="b.html">B: Evidence Board</button>
-  <button data-src="c.html">C: The Terminal</button>
+
+<div class="header">
+  <p class="header__title">Matt Moseley &mdash; Systems Engineer</p>
+  <p class="header__sub">3 Design Concepts</p>
 </div>
-<iframe id="preview" src="a.html"></iframe>
-<script>
-const frame = document.getElementById('preview');
-const btns = document.querySelectorAll('.picker button[data-src]');
-btns.forEach(b => b.addEventListener('click', () => {
-  btns.forEach(x => x.classList.remove('active'));
-  b.classList.add('active');
-  frame.src = b.dataset.src;
-}));
-</script>
+
+<nav class="cards" aria-label="Design concepts">
+  <a class="card" href="a.html">
+    <div class="card__body">
+      <div class="card__name">A &mdash; Signal Path</div>
+      <div class="card__desc">Long-form narrative, fixed sidebar, scroll progress indicator</div>
+    </div>
+    <span class="card__arrow" aria-hidden="true">&#8594;</span>
+  </a>
+
+  <a class="card" href="b.html">
+    <div class="card__body">
+      <div class="card__name">B &mdash; Evidence Board</div>
+      <div class="card__desc">Bento grid with expandable role tiles and career arc chart</div>
+    </div>
+    <span class="card__arrow" aria-hidden="true">&#8594;</span>
+  </a>
+
+  <a class="card" href="c.html">
+    <div class="card__body">
+      <div class="card__name">C &mdash; The Terminal</div>
+      <div class="card__desc">Full-screen spatial panels with horizontal swipe navigation</div>
+    </div>
+    <span class="card__arrow" aria-hidden="true">&#8594;</span>
+  </a>
+</nav>
+
 </body>
 </html>

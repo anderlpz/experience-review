@@ -140,7 +140,7 @@
       color: var(--text-4);
       text-decoration: none;
       padding: 0.45rem 0;
-      min-height: 44px;
+      min-height: 48px;
       transition: color 0.2s ease;
     }
 
@@ -185,7 +185,7 @@
       letter-spacing: 0.09em;
       color: var(--text-3);
       text-decoration: none;
-      min-height: 44px;
+      min-height: 48px;
       display: flex;
       align-items: center;
       transition: color 0.2s ease;
@@ -505,42 +505,53 @@
     @media (max-width: 1023px) {
 
       body {
-        padding-top: 64px;
+        /* 3px progress bar + 64px header + safe-area notch clearance */
+        padding-top: calc(67px + env(safe-area-inset-top, 0px));
       }
 
-      /* Horizontal progress bar at very top */
+      /* Horizontal progress bar at very top — safe-area aware */
       .progress-bar {
         display: block;
         position: fixed;
-        inset: 0 0 auto 0;
-        height: 3px;
+        top: 0;
+        left: 0;
+        right: 0;
+        /* reserve safe-area height above notch, plus the 3px active stripe */
+        height: calc(env(safe-area-inset-top, 0px) + 3px);
         z-index: 100;
         background: var(--border);
+        padding-top: env(safe-area-inset-top, 0px);
       }
 
       .progress-bar__fill {
-        height: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 3px;
         background: linear-gradient(to right, var(--cu-500), var(--cu-300));
         transform-origin: left center;
         transform: scaleX(0);
         will-change: transform;
       }
 
-      /* Compact sticky header */
+      /* Compact sticky header — safe-area aware */
       .mobile-header {
         display: flex;
         position: fixed;
-        inset: 0 0 auto 0;
+        top: calc(env(safe-area-inset-top, 0px) + 3px);
+        left: 0;
+        right: 0;
         height: 64px;
         background: rgba(18, 17, 16, 0.94);
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         align-items: center;
         justify-content: space-between;
-        padding: 0 1.25rem;
+        /* honour notch on landscape */
+        padding: 0 max(1.25rem, env(safe-area-inset-left, 0px));
         z-index: 50;
         border-bottom: 1px solid var(--border);
-        margin-top: 3px; /* clear the progress bar */
       }
 
       .mobile-header__name {
@@ -574,7 +585,7 @@
       }
 
       .contact-section {
-        padding: 4.5rem 1.5rem 5rem;
+        padding: 4.5rem 1.5rem calc(5rem + env(safe-area-inset-bottom, 0px));
         min-height: auto;
       }
 
@@ -601,6 +612,12 @@
 
       .contact-section__heading {
         font-size: clamp(1.5rem, 7vw, 2rem);
+      }
+
+      /* Skill chips: legible on small screens */
+      .skill-chip {
+        font-size: 12px;
+        padding: 0.4rem 0.75rem;
       }
     }
   </style>

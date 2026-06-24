@@ -204,8 +204,8 @@
       text-decoration: none;
       border: none;
       cursor: pointer;
-      min-height: 44px;
-      min-width: 44px;
+      min-height: 48px;
+      min-width: 48px;
       transition: opacity 0.15s ease, transform 0.12s ease, background 0.15s ease;
       white-space: nowrap;
     }
@@ -293,7 +293,7 @@
 
     .arc-phase-label {
       font-family: 'Inter', sans-serif;
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 600;
       fill: var(--text-3);
       letter-spacing: 0.04em;
@@ -301,7 +301,7 @@
 
     .arc-year-label {
       font-family: 'Inter', sans-serif;
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 500;
       fill: var(--text-4);
     }
@@ -801,7 +801,7 @@
        Responsive — Mobile (≤600px)
     ───────────────────────────────────────────────────────────── */
     @media (max-width: 600px) {
-      .page { padding: 20px 12px 48px; }
+      .page { padding: 20px 16px calc(48px + env(safe-area-inset-bottom, 0px)); }
 
       .bento-grid { grid-template-columns: 1fr; gap: 12px; }
 
@@ -829,6 +829,40 @@
       }
 
       .metric-big { font-size: clamp(3rem, 16vw, 4.5rem); }
+
+      /* ─── Mobile typography & UX fixes ─── */
+
+      /* Prevent shipped tile from clipping its pill content */
+      .tile-shipped { overflow: visible; }
+
+      /* Body text ≥ 16px */
+      .shipped-sub  { font-size: 1rem; line-height: 1.55; }
+      .identity-sub { font-size: 1rem; }
+      .role-hook    { font-size: 1rem; }
+      .arc-tagline  { font-size: 0.9375rem; }
+
+      /* SVG chart labels — min 12px */
+      .arc-phase-label { font-size: 12px; }
+      .arc-year-label  { font-size: 11px; }
+
+      /* Skill chips — min 12px, wrappable */
+      .chip { font-size: 0.8125rem; padding: 6px 13px; }
+
+      /* Buttons: same size, full-width stack on mobile */
+      .btn-group { flex-direction: column; }
+      .btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 48px;
+      }
+
+      /* "Expand role" minimum 48px tap area */
+      .expand-hint {
+        min-height: 48px;
+        padding-top: 12px;
+        padding-bottom: 4px;
+        align-items: center;
+      }
     }
 
     /* ─────────────────────────────────────────────────────────────
