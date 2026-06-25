@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Matt Moseley — Systems Engineer</title>
+<meta name="description" content="15 years at the seam between hardware and software. Navy, Apple, Microsoft.">
+<meta property="og:title" content="Matt Moseley — Systems Engineer">
+<meta property="og:description" content="Hardware to software. Fifteen years at the seam where things break.">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#000000">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,900;1,900&family=Inter:wght@300;400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #000000;
+  --fg: #ffffff;
+  --accent: #d97706;
+  --hairline: rgba(255,255,255,0.12);
+  --muted: rgba(255,255,255,0.35);
+  --dim: rgba(255,255,255,0.55);
+  --pad: max(20px, env(safe-area-inset-left, 0px));
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+}
+.display {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.88;
+  text-transform: uppercase;
+}
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-size: 9px;
+}
+.mono-lg {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 400;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+.accent { color: var(--accent); }
+.hl-b { border-bottom: 0.5px solid var(--hairline); }
+.hl-t { border-top: 0.5px solid var(--hairline); }
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--pad);
+  background: rgba(0,0,0,0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 0.5px solid var(--hairline);
+  z-index: 1000;
+}
+.nav-logo {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.nav-links { display: none; gap: 36px; }
+.nav-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.3s;
+  padding: 12px 0;
+}
+.nav-links a:hover { color: #fff; }
+.nav-resume {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--fg);
+  padding: 10px 18px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
+.nav-resume:hover { background: var(--accent); color: #fff; }
+.nav-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px; height: 48px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fg);
+}
+.nav-toggle span {
+  display: block;
+  width: 20px; height: 1.5px;
+  background: currentColor;
+  position: relative;
+}
+.nav-toggle span::before, .nav-toggle span::after {
+  content: '';
+  position: absolute;
+  left: 0; width: 100%; height: 1.5px;
+  background: currentColor;
+}
+.nav-toggle span::before { top: -6px; }
+.nav-toggle span::after { top: 6px; }
+.nav-mobile {
+  display: none;
+  position: fixed;
+  top: 60px; left: 0; right: 0;
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 0.5px solid var(--hairline);
+  padding: 16px var(--pad);
+  z-index: 999;
+  flex-direction: column;
+}
+.nav-mobile.open { display: flex; }
+.nav-mobile a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  padding: 16px 0;
+  border-bottom: 0.5px solid var(--hairline);
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
+.nav-mobile a:last-child { border-bottom: none; }
+.nav-mobile a:hover { color: #fff; }
+
+/* HERO */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 80px var(--pad) 0;
+  border-bottom: 0.5px solid var(--hairline);
+}
+.hero-label { color: var(--muted); margin-bottom: 32px; }
+.hero-headline {
+  font-size: clamp(56px, 14vw, 200px);
+  margin-bottom: 24px;
+}
+.hero-headline .accent-line { color: var(--accent); }
+.hero-tagline {
+  color: var(--dim);
+  max-width: 440px;
+  margin-bottom: 40px;
+}
+.hero-bottom {
+  display: grid;
+  grid-template-columns: 1fr;
+  border-top: 0.5px solid var(--hairline);
+}
+.hero-stat {
+  padding: 24px 0;
+  border-bottom: 0.5px solid var(--hairline);
+}
+.hero-stat:last-child { border-bottom: none; }
+.hero-stat-label { color: var(--muted); margin-bottom: 6px; }
+.hero-stat-value { color: #fff; }
+.hero-stat-value.accent { color: var(--accent); }
+.hero-log { display: none; }
+.hero-log-entry {
+  padding: 20px 0;
+  border-bottom: 0.5px solid var(--hairline);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.hero-log-entry:last-child { border-bottom: none; }
+.hero-log-employer {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+/* MARQUEE */
+.marquee-track {
+  overflow: hidden;
+  border-bottom: 0.5px solid var(--hairline);
+  padding: 16px 0;
+  white-space: nowrap;
+}
+.marquee-inner {
+  display: inline-flex;
+  gap: 48px;
+  animation: marquee 40s linear infinite;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-word {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.15);
+  cursor: default;
+}
+.marquee-word.accent { color: var(--accent); opacity: 0.6; }
+
+/* PHASES */
+.phase {
+  position: relative;
+  overflow: hidden;
+  padding: 60px var(--pad);
+  border-bottom: 0.5px solid var(--hairline);
+}
+.phase-bg {
+  position: absolute;
+  right: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: clamp(100px, 22vw, 320px);
+  letter-spacing: -0.06em;
+  line-height: 0.85;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.03);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+.phase-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 0.5px solid var(--hairline);
+}
+.phase-num { color: var(--accent); }
+.phase-dates { color: var(--muted); }
+.phase-title {
+  font-size: clamp(36px, 7vw, 72px);
+  margin-bottom: 8px;
+}
+.phase-role { color: var(--dim); margin-bottom: 24px; }
+.phase-body {
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--dim);
+  max-width: 640px;
+  margin-bottom: 24px;
+}
+.phase-insight {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 300;
+  font-style: italic;
+  font-size: clamp(16px, 2.5vw, 22px);
+  line-height: 1.5;
+  color: rgba(255,255,255,0.75);
+  max-width: 580px;
+  margin-bottom: 32px;
+  padding-left: 16px;
+  border-left: 2px solid var(--accent);
+}
+.phase-devices { display: flex; flex-wrap: wrap; gap: 8px; }
+.phase-device {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 8px 14px;
+  border: 0.5px solid var(--hairline);
+  color: var(--dim);
+  transition: border-color 0.3s, color 0.3s;
+}
+.phase-device:hover { border-color: var(--accent); color: var(--accent); }
+
+/* STATS */
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 0.5px solid var(--hairline);
+}
+.stat-cell {
+  padding: 40px var(--pad);
+  border-bottom: 0.5px solid var(--hairline);
+  border-right: 0.5px solid var(--hairline);
+}
+.stat-cell:nth-child(2n) { border-right: none; }
+.stat-cell:nth-last-child(-n+2) { border-bottom: none; }
+.stat-label { color: var(--muted); margin-bottom: 12px; }
+.stat-num {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: clamp(48px, 10vw, 72px);
+  letter-spacing: -0.05em;
+  line-height: 1;
+}
+.stat-desc { color: var(--muted); margin-top: 10px; }
+
+/* MANIFESTO */
+.manifesto {
+  padding: 80px var(--pad);
+  border-bottom: 0.5px solid var(--hairline);
+}
+.manifesto-label { color: var(--muted); margin-bottom: 24px; }
+.manifesto-headline {
+  font-size: clamp(32px, 6vw, 72px);
+  margin-bottom: 40px;
+}
+.manifesto-body {
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.7);
+  max-width: 640px;
+}
+.manifesto-body + .manifesto-body { margin-top: 24px; }
+
+/* PULL QUOTE */
+.pull-quote {
+  padding: 60px var(--pad);
+  border-bottom: 0.5px solid var(--hairline);
+  text-align: center;
+}
+.pull-quote-text {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-style: italic;
+  font-size: clamp(20px, 4vw, 36px);
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+  color: var(--accent);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* CTA */
+.cta {
+  padding: 80px var(--pad);
+  border-bottom: 0.5px solid var(--hairline);
+}
+.cta-label { color: var(--muted); margin-bottom: 24px; }
+.cta-headline {
+  font-size: clamp(48px, 10vw, 140px);
+  margin-bottom: 40px;
+}
+.cta-body {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--dim);
+  max-width: 480px;
+  margin-bottom: 32px;
+}
+.cta-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--fg);
+  color: var(--bg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 18px 24px;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  min-height: 48px;
+  width: fit-content;
+}
+.btn-primary:hover { background: var(--accent); color: #fff; }
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--fg);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  padding: 18px 24px;
+  border: 0.5px solid var(--hairline);
+  cursor: pointer;
+  transition: border-color 0.3s, color 0.3s;
+  min-height: 48px;
+  width: fit-content;
+}
+.btn-outline:hover { border-color: #fff; color: #fff; }
+.cta-info {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding-top: 32px;
+  border-top: 0.5px solid var(--hairline);
+}
+.cta-info-label { color: var(--muted); margin-bottom: 6px; }
+.cta-info-value {
+  font-size: 13px;
+  color: rgba(255,255,255,0.7);
+  line-height: 1.5;
+}
+.cta-info-value a { transition: color 0.3s; }
+.cta-info-value a:hover { color: var(--accent); }
+
+/* FOOTER */
+footer {
+  padding: 32px var(--pad);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.footer-brand {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+.footer-links { display: flex; gap: 24px; }
+.footer-links a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: color 0.3s;
+  padding: 8px 0;
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+}
+.footer-links a:hover { color: #fff; }
+.footer-copy { color: rgba(255,255,255,0.2); }
+
+/* REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1),
+              transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-inner { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  html { scroll-behavior: auto; }
+}
+
+/* TABLET 768+ */
+@media (min-width: 768px) {
+  :root { --pad: 40px; }
+  .hero { padding: 100px var(--pad) 0; }
+  .hero-bottom { grid-template-columns: repeat(3, 1fr); }
+  .hero-stat {
+    border-bottom: none;
+    border-right: 0.5px solid var(--hairline);
+    padding: 28px 24px;
+  }
+  .hero-stat:last-child { border-right: none; }
+  .stats-row { grid-template-columns: repeat(4, 1fr); }
+  .stat-cell { border-bottom: none !important; }
+  .stat-cell:nth-child(2n) { border-right: 0.5px solid var(--hairline); }
+  .stat-cell:last-child { border-right: none; }
+  .phase { padding: 80px var(--pad); }
+  .cta-buttons { flex-direction: row; }
+  .cta-info { grid-template-columns: 1fr 1fr 1fr; }
+}
+
+/* DESKTOP 1024+ */
+@media (min-width: 1024px) {
+  .nav-links { display: flex; }
+  .nav-toggle { display: none; }
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr auto;
+    padding: 0;
+    padding-top: 60px;
+  }
+  .hero-main {
+    padding: 80px 40px;
+    border-right: 0.5px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .hero-log {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 40px;
+  }
+  .hero-log-header { color: var(--muted); margin-bottom: 24px; }
+  .hero-bottom { grid-column: 1 / -1; }
+  .hero-stat { padding: 28px 40px; }
+  .phase {
+    padding: 100px 40px;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 60px;
+  }
+  .phase-header { grid-column: 1 / -1; }
+  .phase-sidebar {
+    position: sticky;
+    top: 100px;
+    align-self: start;
+  }
+  .manifesto {
+    padding: 120px 40px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 80px;
+    align-items: start;
+  }
+  .cta {
+    padding: 120px 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: end;
+  }
+}
+
+@media (min-width: 1400px) {
+  .hero-headline { font-size: 160px; }
+  .phase { gap: 100px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Moseley</div>
+  <div class="nav-links">
+    <a href="#career">Career</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a href="resume/Matt_Moseley_Resume.pdf" class="nav-resume" target="_blank" rel="noopener">Resume</a>
+  <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.nav-mobile').classList.toggle('open')">
+    <span></span>
+  </button>
+</nav>
+<div class="nav-mobile">
+  <a href="#career" onclick="this.parentElement.classList.remove('open')">Career</a>
+  <a href="#about" onclick="this.parentElement.classList.remove('open')">About</a>
+  <a href="#contact" onclick="this.parentElement.classList.remove('open')">Contact</a>
+  <a href="resume/Matt_Moseley_Resume.pdf" target="_blank" rel="noopener">Resume PDF</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-main">
+    <div>
+      <div class="mono hero-label">SYS_INIT / SYSTEMS ENGINEER / 2008&ndash;2025</div>
+      <h1 class="display hero-headline">HARD<br>WARE<br><span class="accent-line">MEETS</span><br>SOFT<br>WARE</h1>
+      <p class="mono-lg hero-tagline">Fifteen years at the seam. Navy to Apple to Microsoft.</p>
+    </div>
+  </div>
+  <div class="hero-log">
+    <div class="mono hero-log-header">CAREER_LOG</div>
+    <div class="hero-log-entry">
+      <div>
+        <div class="mono" style="color:var(--accent);margin-bottom:6px;">001</div>
+        <div class="hero-log-employer">U.S. Navy</div>
+      </div>
+      <div class="mono" style="color:var(--muted);">2008&ndash;2013</div>
+    </div>
+    <div class="hero-log-entry">
+      <div>
+        <div class="mono" style="color:var(--accent);margin-bottom:6px;">002</div>
+        <div class="hero-log-employer">Apple</div>
+      </div>
+      <div class="mono" style="color:var(--muted);">2013&ndash;2022</div>
+    </div>
+    <div class="hero-log-entry">
+      <div>
+        <div class="mono" style="color:var(--accent);margin-bottom:6px;">003</div>
+        <div class="hero-log-employer">Microsoft</div>
+      </div>
+      <div class="mono" style="color:var(--muted);">2022&ndash;2025</div>
+    </div>
+    <div style="padding-top:24px;border-top:0.5px solid var(--hairline);margin-top:8px;">
+      <div class="mono" style="color:var(--muted);margin-bottom:6px;">CURRENT_STATUS</div>
+      <div class="mono-lg accent">Open to systems engineering roles</div>
+    </div>
+  </div>
+  <div class="hero-bottom hl-t">
+    <div class="hero-stat">
+      <div class="mono hero-stat-label">YEARS_ACTIVE</div>
+      <div class="mono-lg hero-stat-value">15</div>
+    </div>
+    <div class="hero-stat">
+      <div class="mono hero-stat-label">EMPLOYERS</div>
+      <div class="mono-lg hero-stat-value">3</div>
+    </div>
+    <div class="hero-stat">
+      <div class="mono hero-stat-label">DEVICES_SHIPPED</div>
+      <div class="mono-lg hero-stat-value accent">100M+</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-track" aria-hidden="true">
+  <div class="marquee-inner">
+    <span class="marquee-word">RF SYSTEMS</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">SATCOM</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">WIRELESS VALIDATION</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">DRIVER QUALITY</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">FACTORY AUTOMATION</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">FAULT ISOLATION</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">SYSTEMS INTEGRATION</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">HLK CERTIFICATION</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">RF SYSTEMS</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">SATCOM</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">WIRELESS VALIDATION</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">DRIVER QUALITY</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">FACTORY AUTOMATION</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">FAULT ISOLATION</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">SYSTEMS INTEGRATION</span>
+    <span class="marquee-word accent">//</span>
+    <span class="marquee-word">HLK CERTIFICATION</span>
+    <span class="marquee-word accent">//</span>
+  </div>
+</div>
+
+<!-- PHASE 001: NAVY -->
+<section class="phase" id="career">
+  <div class="phase-bg" aria-hidden="true">SATCOM</div>
+  <div class="phase-header">
+    <span class="mono"><span class="phase-num accent">001</span> &nbsp;/&nbsp; SERIOUS HARDWARE</span>
+    <span class="mono phase-dates">2008&ndash;2013</span>
+  </div>
+  <div class="phase-sidebar reveal">
+    <h2 class="display phase-title">U.S.<br>NAVY</h2>
+    <p class="mono phase-role">Electronics Technician</p>
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--accent);margin-top:16px;opacity:0.5;">
+      <ellipse cx="24" cy="16" rx="18" ry="10"/>
+      <line x1="24" y1="16" x2="24" y2="44"/>
+      <line x1="16" y1="44" x2="32" y2="44"/>
+      <circle cx="24" cy="16" r="3" fill="currentColor"/>
+    </svg>
+  </div>
+  <div class="phase-content reveal" style="transition-delay:0.1s;">
+    <p class="phase-body">Shipboard SATCOM systems. SHF/EHF radio, fault isolation, strategic communications training. Navy electronics school and advanced RF coursework. The equipment was military-grade, the environment was a ship at sea, and downtime was not an option.</p>
+    <p class="phase-insight">Found the fault before it found the ship. On military electronics, there was no margin.</p>
+    <div class="phase-devices">
+      <span class="phase-device">SATCOM Terminals</span>
+      <span class="phase-device">Radar Systems</span>
+      <span class="phase-device">Military RF</span>
+      <span class="phase-device">SHF/EHF Radio</span>
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 002: APPLE -->
+<section class="phase">
+  <div class="phase-bg" aria-hidden="true">iPHONE</div>
+  <div class="phase-header">
+    <span class="mono"><span class="phase-num accent">002</span> &nbsp;/&nbsp; HARDWARE AT SCALE</span>
+    <span class="mono phase-dates">2013&ndash;2022</span>
+  </div>
+  <div class="phase-sidebar reveal">
+    <h2 class="display phase-title">APPLE</h2>
+    <p class="mono phase-role">RF Systems Engineer</p>
+    <svg width="32" height="56" viewBox="0 0 32 56" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--accent);margin-top:16px;opacity:0.5;">
+      <rect x="1" y="1" width="30" height="54" rx="6"/>
+      <line x1="10" y1="4" x2="22" y2="4" stroke-width="1.5"/>
+      <circle cx="16" cy="50" r="2"/>
+    </svg>
+  </div>
+  <div class="phase-content reveal" style="transition-delay:0.1s;">
+    <p class="phase-body">RF desense analysis, wireless validation, factory test automation, lab debug, systems integration. The same RF discipline from a ship's radio room, now applied at consumer scale with hundreds of millions of units on the line. Completed a B.S. in Engineering (ABET-accredited) while working full-time.</p>
+    <p class="phase-insight">Make the radio behave before the production line starts moving. At Apple's scale, the physics has to be right the first time.</p>
+    <div class="phase-devices">
+      <span class="phase-device">iPhone 13</span>
+      <span class="phase-device">iPhone 14</span>
+      <span class="phase-device">iPhone 15</span>
+      <span class="phase-device">AirPods Pro</span>
+    </div>
+  </div>
+</section>
+
+<!-- PHASE 003: MICROSOFT -->
+<section class="phase">
+  <div class="phase-bg" aria-hidden="true">KERNEL</div>
+  <div class="phase-header">
+    <span class="mono"><span class="phase-num accent">003</span> &nbsp;/&nbsp; THE SOFTWARE UNDERNEATH</span>
+    <span class="mono phase-dates">2022&ndash;2025</span>
+  </div>
+  <div class="phase-sidebar reveal">
+    <h2 class="display phase-title">MICRO<br>SOFT</h2>
+    <p class="mono phase-role">Driver Quality / Platform Tooling</p>
+    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1" style="color:var(--accent);margin-top:16px;opacity:0.5;">
+      <rect x="12" y="12" width="24" height="24" rx="2"/>
+      <line x1="18" y1="12" x2="18" y2="6"/><line x1="24" y1="12" x2="24" y2="6"/><line x1="30" y1="12" x2="30" y2="6"/>
+      <line x1="18" y1="36" x2="18" y2="42"/><line x1="24" y1="36" x2="24" y2="42"/><line x1="30" y1="36" x2="30" y2="42"/>
+      <line x1="12" y1="18" x2="6" y2="18"/><line x1="12" y1="24" x2="6" y2="24"/><line x1="12" y1="30" x2="6" y2="30"/>
+      <line x1="36" y1="18" x2="42" y2="18"/><line x1="36" y1="24" x2="42" y2="24"/><line x1="36" y1="30" x2="42" y2="30"/>
+      <rect x="18" y="18" width="12" height="12" fill="currentColor" opacity="0.15"/>
+    </svg>
+  </div>
+  <div class="phase-content reveal" style="transition-delay:0.1s;">
+    <p class="phase-body">Windows driver quality tools, WDK, HLK, Driver Verifier, certification workflows, partner validation. Systems-level C/C++ at the boundary where the operating system talks to hardware. Every Windows driver has to clear these tools before it ships.</p>
+    <p class="phase-insight">The failure gets caught in the lab, not by someone debugging at 2 AM. That's the job.</p>
+    <div class="phase-devices">
+      <span class="phase-device">Driver Verifier</span>
+      <span class="phase-device">Windows HLK</span>
+      <span class="phase-device">WDK</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat-cell reveal">
+    <div class="mono stat-label">YEARS_ACTIVE</div>
+    <div class="stat-num">15</div>
+    <div class="mono stat-desc">Continuous career 2008&ndash;2025</div>
+  </div>
+  <div class="stat-cell reveal" style="transition-delay:0.1s;">
+    <div class="mono stat-label">EMPLOYERS</div>
+    <div class="stat-num accent">3</div>
+    <div class="mono stat-desc">Navy, Apple, Microsoft</div>
+  </div>
+  <div class="stat-cell reveal" style="transition-delay:0.2s;">
+    <div class="mono stat-label">DEVICES_SHIPPED</div>
+    <div class="stat-num">100<span style="font-size:0.45em;color:var(--muted);">M+</span></div>
+    <div class="mono stat-desc">iPhones and AirPods at Apple scale</div>
+  </div>
+  <div class="stat-cell reveal" style="transition-delay:0.3s;">
+    <div class="mono stat-label">PRODUCTS</div>
+    <div class="stat-num">7<span style="font-size:0.45em;color:var(--muted);">+</span></div>
+    <div class="mono stat-desc">iPhone 13/14/15, AirPods Pro, HLK, WDK, Driver Verifier</div>
+  </div>
+</div>
+
+<!-- MANIFESTO -->
+<section class="manifesto" id="about">
+  <div class="reveal">
+    <div class="mono manifesto-label">THE_THROUGH_LINE</div>
+    <h2 class="display manifesto-headline">SAME<br>SEAM,<br>EVERY<br>SCALE</h2>
+  </div>
+  <div>
+    <p class="manifesto-body reveal">I work where hardware meets software&mdash;the seam where things tend to break&mdash;and I've spent fifteen years making sure they don't.</p>
+    <p class="manifesto-body reveal" style="transition-delay:0.1s;">Navy taught signals. Apple taught scale. Microsoft taught the platform underneath. Same job at increasing abstraction, always at the boundary between the physical and the digital.</p>
+    <p class="manifesto-body reveal" style="transition-delay:0.2s;">The fundamentals carried further than I expected. RF troubleshooting on a ship looks nothing like driver verification on Windows, but the instinct is identical: find the fault, isolate the variables, fix it before it reaches someone who can't.</p>
+  </div>
+</section>
+
+<!-- PULL QUOTE -->
+<div class="pull-quote reveal">
+  <p class="pull-quote-text">&ldquo;Probably the only resume with both AirPods and Driver Verifier on it.&rdquo;</p>
+</div>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <div>
+    <div class="mono cta-label">LET&rsquo;S_CONNECT</div>
+    <h2 class="display cta-headline reveal">LET'S<br>TALK</h2>
+  </div>
+  <div class="cta-right">
+    <p class="cta-body reveal">Open to systems engineering roles. Based in the Pacific Northwest. Available for conversations about hardware/software integration, driver quality, RF systems, or anything at the seam.</p>
+    <div class="cta-buttons reveal" style="transition-delay:0.1s;">
+      <a href="resume/Matt_Moseley_Resume.pdf" class="btn-primary" target="_blank" rel="noopener">
+        Download Resume
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      </a>
+      <a href="mailto:daniel.m.moseley@gmail.com" class="btn-outline">
+        Send Email
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+    <div class="cta-info reveal" style="transition-delay:0.2s;">
+      <div>
+        <div class="mono cta-info-label">EMAIL</div>
+        <div class="cta-info-value"><a href="mailto:daniel.m.moseley@gmail.com">daniel.m.moseley@gmail.com</a></div>
+      </div>
+      <div>
+        <div class="mono cta-info-label">LOCATION</div>
+        <div class="cta-info-value">Pacific Northwest</div>
+      </div>
+      <div>
+        <div class="mono cta-info-label">LINKEDIN</div>
+        <div class="cta-info-value"><a href="https://linkedin.com/in/" target="_blank" rel="noopener">linkedin.com/in/matt-moseley</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="hl-t">
+  <div class="footer-top">
+    <div class="footer-brand">Moseley</div>
+    <div class="footer-links">
+      <a href="#career">Career</a>
+      <a href="#about">About</a>
+      <a href="resume/Matt_Moseley_Resume.pdf" target="_blank" rel="noopener">Resume</a>
+      <a href="mailto:daniel.m.moseley@gmail.com">Email</a>
+    </div>
+  </div>
+  <div class="mono footer-copy">MATT MOSELEY / SYSTEMS ENGINEER / PACIFIC NORTHWEST / 2008&ndash;2025</div>
+</footer>
+
+<script>
+  var reveals = document.querySelectorAll('.reveal');
+  if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(function(el) { observer.observe(el); });
+  } else {
+    reveals.forEach(function(el) { el.classList.add('visible'); });
+  }
+  window.addEventListener('scroll', function() {
+    var menu = document.querySelector('.nav-mobile');
+    if (menu && menu.classList.contains('open')) menu.classList.remove('open');
+  }, { passive: true });
+</script>
+</body>
+</html>
