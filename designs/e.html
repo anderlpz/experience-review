@@ -71,23 +71,48 @@ a { color: inherit; text-decoration: none; }
   .marquee-track { animation: none !important; }
 }
 
-/* ══════ TOP BAR ══════ */
-.topbar {
-  position: fixed; top: 0; right: 0; z-index: 50;
-  padding: 1.25rem 1.5rem;
+/* ══════ STICKY HEADER (scroll-triggered) ══════ */
+.sticky-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+  padding: 0 1.5rem;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(255,255,255,0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
 }
-.topbar-cta {
+.sticky-header.visible {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: all;
+}
+.sticky-header-name {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 900; font-size: 0.875rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--fg);
+}
+.sticky-header-cta {
   display: inline-flex; align-items: center; gap: 0.5rem;
-  padding: 0.75rem 1.5rem; border-radius: 9999px;
-  background: var(--bg); border: 1px solid var(--border);
-  font-size: 0.875rem; font-weight: 500;
-  transition: all 0.2s; min-height: 48px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  padding: 0.5rem 1.25rem; border-radius: 9999px;
+  background: var(--fg); color: var(--bg);
+  font-size: 0.8125rem; font-weight: 500;
+  transition: all 0.2s; min-height: 40px;
   font-family: 'Inter', sans-serif;
 }
-.topbar-cta:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
-.topbar-cta svg { width: 16px; height: 16px; transition: transform 0.2s; }
-.topbar-cta:hover svg { transform: translateX(2px); }
+.sticky-header-cta:hover { background: #000; }
+.sticky-header-cta svg { width: 14px; height: 14px; transition: transform 0.2s; }
+.sticky-header-cta:hover svg { transform: translateX(2px); }
+
+@media (min-width: 768px) {
+  .sticky-header { padding: 0 2rem; }
+}
 
 
 .nav-inner { display: flex; align-items: center; justify-content: space-between; }
@@ -512,13 +537,14 @@ a { color: inherit; text-decoration: none; }
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <a href="resume/Matt_Moseley_Resume.pdf" class="topbar-cta" target="_blank">
+<!-- STICKY HEADER (appears after hero CTA scrolls out) -->
+<header class="sticky-header" id="stickyHeader">
+  <span class="sticky-header-name">Moseley</span>
+  <a href="resume/Matt_Moseley_Resume.pdf" class="sticky-header-cta" target="_blank">
     Resume
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/></svg>
   </a>
-</div>
+</header>
 
 <!-- HERO -->
 <section class="hero">
@@ -533,7 +559,7 @@ a { color: inherit; text-decoration: none; }
     <p class="hero-sub reveal reveal-d2">
       Fifteen years at the seam where things tend to break&thinsp;&mdash;&thinsp;from Navy shipboard electronics to Apple RF systems to Windows kernel tooling. The fundamentals carried further than expected.
     </p>
-    <div class="hero-cta-wrap reveal reveal-d3">
+    <div class="hero-cta-wrap reveal reveal-d3" id="heroCta">
       <a href="resume/Matt_Moseley_Resume.pdf" class="hero-cta" target="_blank">
         Download Resume
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
@@ -868,16 +894,34 @@ a { color: inherit; text-decoration: none; }
 
 <script>
 (function() {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  var observer = new IntersectionObserver(function(entries) {
-    entries.forEach(function(entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(function(el) { observer.observe(el); });
+  // Scroll reveal animations
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var revealObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(function(el) { revealObs.observe(el); });
+  }
+
+  // Sticky header — appears when hero CTA scrolls out of view
+  var heroCta = document.getElementById('heroCta');
+  var stickyHeader = document.getElementById('stickyHeader');
+  if (heroCta && stickyHeader) {
+    var headerObs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          stickyHeader.classList.remove('visible');
+        } else {
+          stickyHeader.classList.add('visible');
+        }
+      });
+    }, { threshold: 0 });
+    headerObs.observe(heroCta);
+  }
 })();
 </script>
 
