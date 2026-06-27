@@ -71,8 +71,25 @@ a { color: inherit; text-decoration: none; }
   .marquee-track { animation: none !important; }
 }
 
-/* ══════ NAVIGATION ══════ */
-.nav { position: relative; z-index: 50; padding: 1.25rem 0; }
+/* ══════ TOP BAR ══════ */
+.topbar {
+  position: fixed; top: 0; right: 0; z-index: 50;
+  padding: 1.25rem 1.5rem;
+}
+.topbar-cta {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  padding: 0.75rem 1.5rem; border-radius: 9999px;
+  background: var(--bg); border: 1px solid var(--border);
+  font-size: 0.875rem; font-weight: 500;
+  transition: all 0.2s; min-height: 48px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  font-family: 'Inter', sans-serif;
+}
+.topbar-cta:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.topbar-cta svg { width: 16px; height: 16px; transition: transform 0.2s; }
+.topbar-cta:hover svg { transform: translateX(2px); }
+
+
 .nav-inner { display: flex; align-items: center; justify-content: space-between; }
 
 .nav-logo {
@@ -495,33 +512,12 @@ a { color: inherit; text-decoration: none; }
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="container nav-inner">
-    <a href="#" class="nav-logo">Matt Moseley</a>
-    <ul class="nav-links">
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#numbers">Numbers</a></li>
-      <li><a href="#story">Story</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <a href="resume/Matt_Moseley_Resume.pdf" class="nav-cta" target="_blank">
-      Resume
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/></svg>
-    </a>
-    <button class="nav-toggle" onclick="document.querySelector('.mobile-menu').classList.add('open')" aria-label="Open menu">
-      <span></span><span></span>
-    </button>
-  </div>
-</nav>
-
-<div class="mobile-menu">
-  <button class="mobile-menu-close" onclick="this.parentElement.classList.remove('open')" aria-label="Close menu">&#10005;</button>
-  <a href="#experience" onclick="this.parentElement.classList.remove('open')">Experience</a>
-  <a href="#numbers" onclick="this.parentElement.classList.remove('open')">Numbers</a>
-  <a href="#story" onclick="this.parentElement.classList.remove('open')">Story</a>
-  <a href="#contact" onclick="this.parentElement.classList.remove('open')">Contact</a>
-  <a href="resume/Matt_Moseley_Resume.pdf" target="_blank" onclick="this.parentElement.classList.remove('open')">Resume &#8599;</a>
+<!-- TOP BAR -->
+<div class="topbar">
+  <a href="resume/Matt_Moseley_Resume.pdf" class="topbar-cta" target="_blank">
+    Resume
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 19.5 15-15m0 0H8.25m11.25 0v11.25"/></svg>
+  </a>
 </div>
 
 <!-- HERO -->
